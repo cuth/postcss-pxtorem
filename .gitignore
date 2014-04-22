@@ -1,0 +1,6 @@
+node_modules/
+test/
+example/
+.editorconfig
+.jshintrc
+spec/
