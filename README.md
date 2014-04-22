@@ -17,7 +17,7 @@ var pixrem = require('pxtorem');
 var css = fs.readFileSync('main.css', 'utf8');
 var processedCss = pixrem(css, '16');
 
-fs.writeFile('main.with-fallbacks.css', processedCss, function (err) {
+fs.writeFile('main-rem.css', processedCss, function (err) {
   if (err) {
     throw err;
   }
@@ -38,7 +38,7 @@ Some CSS to process.
 Type: `Number`  
 Default: `16`  
 
-The root element font size. Can be px, rem, em, percent, or unitless pixel value.
+The root element font size. Has to be a number that represents a pixel unit.
 
 #### options
 
