@@ -6,9 +6,9 @@
   "author": "Jon Cuthbert <jon@cuth.net> (http://cuth.net)",
   "repository": {
     "type": "git",
-    "url": "git://github.com/cuth/..."
+    "url": "git://github.com/cuth/node-pxtorem"
   },
-  "bugs": "https://github.com/cuth/.../issues",
+  "bugs": "https://github.com/cuth/node-pxtorem/issues",
   "licenses": [
     {
       "type": "BSD-new"
