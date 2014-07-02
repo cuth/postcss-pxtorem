@@ -2,7 +2,7 @@
 
 A CSS post-processor that generates rem units from pixel units.  
 Written with [PostCSS](https://github.com/ai/postcss).  
-This is essentially [node-pixrem](https://github.com/robwierzbowski/node-pixrem) only reversed. All credit for goes to that project for the code base.
+This is essentially [node-pixrem](https://github.com/robwierzbowski/node-pixrem) only reversed.
 
 ## Usage
 
@@ -11,17 +11,18 @@ Pixels are the easiest unit to use. The only issue with them is that they don't 
 ### Example
 
 ```js
-'use strict';
 var fs = require('fs');
-var pixrem = require('pxtorem');
+var pixrem = require('../lib/pxtorem');
 var css = fs.readFileSync('main.css', 'utf8');
-var processedCss = pixrem(css, '16');
+var processedCss = pixrem(css, {
+    replace: false
+});
 
 fs.writeFile('main-rem.css', processedCss, function (err) {
   if (err) {
     throw err;
   }
-  console.log('Hello font resizing.');
+  console.log('REM file written.');
 });
 ```
 
@@ -30,20 +31,24 @@ fs.writeFile('main-rem.css', processedCss, function (err) {
 #### css
 
 Type: `String`  
-
 Some CSS to process.
-
-#### rootvalue
-
-Type: `Number`  
-Default: `16`  
-
-The root element font size. Has to be a number that represents a pixel unit.
 
 #### options
 
 Type: `Object | Null`  
-Default: `{ replace: false }`  
+Default:
+```js
+{
+    root_value: 16,
+    unit_precision: 5,
+    prop_white_list: ['font', 'font-size', 'line-height', 'letter-spacing'],
+    replace: true,
+    media_query: false
+}
+```
 
-- `replace` replaces rules containing rems instead of adding fallbacks.
-
+- `root_value` (Number) The root element font size.
+- `unit_precision` (Number) The decimal numbers to allow the REM units to grow to.
+- `prop_white_list` (Array) The properties that can change from px to rem.
+- `replace` (Boolean) replaces rules containing rems instead of adding fallbacks.
+- `media_query` (Boolean) Allow px to be converted in media queries.

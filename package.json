@@ -1,7 +1,7 @@
 {
   "name": "pxtorem",
   "description": "A CSS post-processor that converts px to rem.",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "homepage": "",
   "author": "Jon Cuthbert <jon@cuth.net> (http://cuth.net)",
   "repository": {
@@ -32,7 +32,6 @@
     "css",
     "parser",
     "postproccessor",
-    "rem",
-    "responsive"
+    "rem"
   ]
 }
