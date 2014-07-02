@@ -2,18 +2,12 @@
   "name": "pxtorem",
   "description": "A CSS post-processor that converts px to rem.",
   "version": "0.0.0",
-  "homepage": "",
-  "author": "Jon Cuthbert <jon@cuth.net> (http://cuth.net)",
+  "author": "Jon Cuthbert <jon@cuth.net> (https://github.com/cuth)",
   "repository": {
     "type": "git",
     "url": "git://github.com/cuth/node-pxtorem"
   },
   "bugs": "https://github.com/cuth/node-pxtorem/issues",
-  "licenses": [
-    {
-      "type": "BSD-new"
-    }
-  ],
   "main": "lib/pxtorem.js",
   "engines": {
     "node": ">=0.10.0",
