@@ -1,9 +1,9 @@
 'use strict';
 
 var fs = require('fs');
-var pixrem = require('../lib/pxtorem');
+var pxtorem = require('../lib/pxtorem');
 var css = fs.readFileSync('main.css', 'utf8');
-var processedCss = pixrem(css, {
+var processedCss = pxtorem(css, {
     replace: false
 });
 
