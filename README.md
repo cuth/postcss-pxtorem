@@ -1,12 +1,14 @@
-# Pxtorem [![NPM version](https://badge.fury.io/js/pxtorem.svg)](http://badge.fury.io/js/pxtorem)
+# pxtorem [![NPM version](https://badge.fury.io/js/pxtorem.svg)](http://badge.fury.io/js/pxtorem)
 
 A CSS post-processor that generates rem units from pixel units.  
 Written with [PostCSS](https://github.com/ai/postcss).  
 This is essentially [node-pixrem](https://github.com/robwierzbowski/node-pixrem) only reversed.
 
+
 ## Usage
 
 Pixels are the easiest unit to use. The only issue with them is that they don't let browsers change the default font size of 16. This script converts every px value to a rem to allow the browser to choose the font size.
+
 
 ### Example
 
@@ -52,3 +54,8 @@ Default:
 - `prop_white_list` (Array) The properties that can change from px to rem.
 - `replace` (Boolean) replaces rules containing rems instead of adding fallbacks.
 - `media_query` (Boolean) Allow px to be converted in media queries.
+
+
+### Tools
+
+[gulp-pxtorem](https://github.com/cuth/gulp-pxtorem)
