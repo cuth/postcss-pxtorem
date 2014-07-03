@@ -7,7 +7,7 @@ This is essentially [node-pixrem](https://github.com/robwierzbowski/node-pixrem)
 
 ## Usage
 
-Pixels are the easiest unit to use. The only issue with them is that they don't let browsers change the default font size of 16. This script converts every px value to a rem to allow the browser to choose the font size.
+Pixels are the easiest unit to use. The only issue with them is that they don't let browsers change the default font size of 16. This script converts every px value to a rem from the properties you choose to allow the browser to set the font size.
 
 
 ### Example
