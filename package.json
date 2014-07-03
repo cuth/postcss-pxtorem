@@ -1,31 +1,31 @@
 {
-  "name": "pxtorem",
-  "description": "A CSS post-processor that converts px to rem.",
-  "version": "0.0.0",
-  "author": "Jon Cuthbert <jon@cuth.net> (https://github.com/cuth)",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/cuth/node-pxtorem"
-  },
-  "bugs": "https://github.com/cuth/node-pxtorem/issues",
-  "main": "lib/pxtorem.js",
-  "engines": {
-    "node": ">=0.10.0",
-    "npm": ">=1.2.10"
-  },
-  "scripts": {
-    "test": "jasmine-node spec"
-  },
-  "dependencies": {
-    "postcss": "~0.3.0"
-  },
-  "devDependencies": {
-    "jasmine-node": "~1.11.0"
-  },
-  "keywords": [
-    "css",
-    "parser",
-    "postproccessor",
-    "rem"
-  ]
+    "name": "pxtorem",
+    "description": "A CSS post-processor that converts px to rem.",
+    "version": "0.0.0",
+    "author": "Jonathan Cuthbert <jon@cuth.net> (http://cuth.net)",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/cuth/pxtorem"
+    },
+    "bugs": "https://github.com/cuth/pxtorem/issues",
+    "main": "lib/pxtorem.js",
+    "engines": {
+        "node": ">=0.10.0",
+        "npm": ">=1.2.10"
+    },
+    "scripts": {
+        "test": "jasmine-node spec"
+    },
+    "dependencies": {
+        "postcss": "~0.3.0"
+    },
+    "devDependencies": {
+        "jasmine-node": "~1.11.0"
+    },
+    "keywords": [
+        "css",
+        "parser",
+        "postproccessor",
+        "rem"
+    ]
 }
