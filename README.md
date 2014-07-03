@@ -1,4 +1,4 @@
-# Pxtorem
+# Pxtorem [![NPM version](https://badge.fury.io/js/pxtorem.svg)](http://badge.fury.io/js/pxtorem)
 
 A CSS post-processor that generates rem units from pixel units.  
 Written with [PostCSS](https://github.com/ai/postcss).  
