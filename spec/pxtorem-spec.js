@@ -79,4 +79,11 @@ describe('pxtorem', function () {
 
         expect(processed).toBe(expected);
     });
+
+    it('should not add properties that already exist', function () {
+        var expected = '.rule { font-size: 16px; font-size: 1rem; }';
+        var processed = pxtorem(expected);
+
+        expect(processed).toBe(expected);
+    });
 });
