@@ -1,31 +1,26 @@
 {
     "name": "pxtorem",
     "description": "A CSS post-processor that converts px to rem.",
-    "version": "0.0.2",
-    "author": "Jonathan Cuthbert <jon@cuth.net> (http://cuth.net)",
+    "version": "1.0.0",
+    "author": "cuth",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "git://github.com/cuth/pxtorem"
     },
     "bugs": "https://github.com/cuth/pxtorem/issues",
-    "main": "lib/pxtorem.js",
-    "engines": {
-        "node": ">=0.10.0",
-        "npm": ">=1.2.10"
-    },
+    "main": "index.js",
     "scripts": {
         "test": "jasmine-node spec"
     },
-    "dependencies": {
-        "postcss": "~0.3.0"
-    },
     "devDependencies": {
+        "postcss": "^2.1.0",
         "jasmine-node": "~1.11.0"
     },
     "keywords": [
         "css",
-        "parser",
-        "postproccessor",
-        "rem"
+        "rem",
+        "postcss",
+        "postcss-plugin"
     ]
 }

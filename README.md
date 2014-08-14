@@ -1,8 +1,6 @@
 # pxtorem [![NPM version](https://badge.fury.io/js/pxtorem.svg)](http://badge.fury.io/js/pxtorem)
 
-A CSS post-processor that generates rem units from pixel units.  
-Written with [PostCSS](https://github.com/ai/postcss).  
-This is essentially [node-pixrem](https://github.com/robwierzbowski/node-pixrem) only reversed.
+A plugin for [PostCSS](https://github.com/ai/postcss) that generates rem units from pixel units.
 
 
 ## Usage
@@ -14,28 +12,23 @@ Pixels are the easiest unit to use. The only issue with them is that they don't 
 
 ```js
 var fs = require('fs');
-var pixrem = require('../lib/pxtorem');
+var postcss = require('postcss');
+var pxtorem = require('pxtorem');
 var css = fs.readFileSync('main.css', 'utf8');
-var processedCss = pixrem(css, {
+var options = {
     replace: false
-});
+};
+var processedCss = postcss(pxtorem(options)).process(css).css;
 
 fs.writeFile('main-rem.css', processedCss, function (err) {
   if (err) {
     throw err;
   }
-  console.log('REM file written.');
+  console.log('Rem file written.');
 });
 ```
 
-### Parameters
-
-#### css
-
-Type: `String`  
-Some CSS to process.
-
-#### options
+### options
 
 Type: `Object | Null`  
 Default:
