@@ -1,7 +1,7 @@
 {
     "name": "pxtorem",
     "description": "A CSS post-processor that converts px to rem.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "cuth",
     "license": "MIT",
     "repository": {
