@@ -1,6 +1,8 @@
-/*
+/**
  *  pxtorem plugin for postcss
  */
+
+'use strict';
 
 module.exports = function (options) {
 
@@ -49,7 +51,7 @@ module.exports = function (options) {
             });
         }
 
-    }
+    };
 };
 
 function toFixed(number, precision) {
