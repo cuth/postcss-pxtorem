@@ -52,3 +52,28 @@ Default:
 ### Tools
 
 [gulp-pxtorem](https://github.com/cuth/gulp-pxtorem)
+
+
+### Use with gulp-postcss and autoprefixer-core
+```js
+var gulp = require('gulp');
+var postcss = require('gulp-postcss');
+var autoprefixer = require('autoprefixer-core');
+var pxtorem = require('pxtorem');
+
+gulp.task('css', function () {
+
+    var processors = [
+        autoprefixer({
+            browsers: 'last 1 version'
+        }),
+        pxtorem({
+            replace: false
+        })
+    ];
+
+    return gulp.src(['build/css/**/*.css'])
+        .pipe(postcss(processors))
+        .pipe(gulp.dest('build/css'));
+});
+```
