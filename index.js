@@ -31,7 +31,7 @@ module.exports = function (options) {
                 value = value.replace(pxRegex, pxReplace);
 
                 // if rem unit already exists, do not add or replace
-                if (remExists(rule.decls, decl.prop, value)) return;
+                if (remExists(rule, decl.prop, value)) return;
 
                 if (replace) {
                     decl.value = value;
