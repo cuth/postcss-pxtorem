@@ -1,4 +1,4 @@
-# pxtorem [![NPM version](https://badge.fury.io/js/pxtorem.svg)](http://badge.fury.io/js/pxtorem)
+# postcss-pxtorem [![NPM version](https://badge.fury.io/js/postcss-pxtorem.svg)](http://badge.fury.io/js/postcss-pxtorem)
 
 A plugin for [PostCSS](https://github.com/ai/postcss) that generates rem units from pixel units.
 
@@ -13,7 +13,7 @@ Pixels are the easiest unit to use. The only issue with them is that they don't 
 ```js
 var fs = require('fs');
 var postcss = require('postcss');
-var pxtorem = require('pxtorem');
+var pxtorem = require('postcss-pxtorem');
 var css = fs.readFileSync('main.css', 'utf8');
 var options = {
     replace: false
@@ -49,17 +49,12 @@ Default:
 - `media_query` (Boolean) Allow px to be converted in media queries.
 
 
-### Tools
-
-[gulp-pxtorem](https://github.com/cuth/gulp-pxtorem)
-
-
 ### Use with gulp-postcss and autoprefixer-core
 ```js
 var gulp = require('gulp');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer-core');
-var pxtorem = require('pxtorem');
+var pxtorem = require('postcss-pxtorem');
 
 gulp.task('css', function () {
 
