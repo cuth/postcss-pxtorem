@@ -27,7 +27,7 @@ module.exports = function (options) {
             var rule = decl.parent;
             var value = decl.value;
 
-            if (decl.parent.selector.indexOf('html') !== -1){
+            if ( rule.selector.indexOf('html') !== -1 && (decl.prop == 'font-size' || decl.prop == 'font')) {
                 decl.value = value.replace(pxRegex, rootValue + 'px');
                 return;
             }
