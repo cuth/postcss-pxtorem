@@ -27,6 +27,11 @@ module.exports = function (options) {
             var rule = decl.parent;
             var value = decl.value;
 
+            if (decl.parent.selector.indexOf('html') !== -1){
+                decl.value = value.replace(pxRegex, rootValue + 'px');
+                return;
+            }
+
             if (value.indexOf('px') !== -1) {
                 value = value.replace(pxRegex, pxReplace);
 
