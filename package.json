@@ -1,7 +1,7 @@
 {
   "name": "postcss-pxtorem",
   "description": "A CSS post-processor that converts px to rem.",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "author": "cuth",
   "license": "MIT",
   "repository": {
@@ -15,12 +15,15 @@
   },
   "devDependencies": {
     "jasmine-node": "~1.11.0",
-    "postcss": "^4.0.3"
+    "postcss": "^4.1.11"
   },
   "keywords": [
     "css",
     "rem",
     "postcss",
     "postcss-plugin"
-  ]
+  ],
+  "dependencies": {
+    "postcss": "^4.1.11"
+  }
 }

@@ -1,12 +1,10 @@
-/**
- *  pxtorem plugin for postcss
- */
-
 'use strict';
 
-module.exports = function (options) {
+var postcss = require('postcss');
 
-    return function(css) {
+module.exports = postcss.plugin('postcss-pxtorem', function (options) {
+
+    return function (css) {
 
         options = options || {};
         var rootValue = options.root_value || 16;
@@ -52,7 +50,7 @@ module.exports = function (options) {
         }
 
     };
-};
+});
 
 function toFixed(number, precision) {
     var multiplier = Math.pow(10, precision + 1),
