@@ -25,6 +25,11 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
             var rule = decl.parent;
             var value = decl.value;
 
+            if ( rule.selector.indexOf('html') !== -1 && (decl.prop == 'font-size' || decl.prop == 'font')) {
+                decl.value = value.replace(pxRegex, rootValue + 'px');
+                return;
+            }
+
             if (value.indexOf('px') !== -1) {
                 value = value.replace(pxRegex, pxReplace);
 
