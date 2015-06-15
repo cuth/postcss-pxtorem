@@ -20,7 +20,7 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
         };
 
         css.eachDecl(function (decl, i) {
-            if (propWhiteList.indexOf(decl.prop) === -1) return;
+            if (propWhiteList !== ['*'] && propWhiteList.indexOf(decl.prop) === -1) return;
 
             var rule = decl.parent;
             var value = decl.value;
