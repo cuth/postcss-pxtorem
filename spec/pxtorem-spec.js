@@ -12,6 +12,17 @@ var css = '.rule { font-size: 15px }';
 
 describe('pxtorem', function () {
 
+    it('should ignore selectors in the selector black list', function () {
+        var rules = '.rule { font-size: 15px } .rule2 { font-size: 15px }';
+        var expected = '.rule { font-size: 0.9375rem } .rule2 { font-size: 15px }';
+        var options = {
+            selector_black_list: ['.rule2']
+        };
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
     it('should replace the px unit with rem', function () {
         var processed = postcss(pxtorem()).process(css).css;
         var expected = '.rule { font-size: 0.9375rem }';

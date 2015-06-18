@@ -9,6 +9,7 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
         options = options || {};
         var rootValue = options.root_value || 16;
         var unitPrecision = options.unit_precision || 5;
+        var selectorBlackList = options.selector_black_list || [];
         var propWhiteList = options.prop_white_list || ['font', 'font-size', 'line-height', 'letter-spacing'];
         var replace = (options.replace === false) ? false : true;
         var mediaQuery = options.media_query || false;
@@ -21,6 +22,18 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
 
         css.eachDecl(function (decl, i) {
             if (propWhiteList.indexOf(decl.prop) === -1) return;
+
+            var selector = decl.parent.selector;
+            var match = false;
+            for (var j=0; j<selectorBlackList.length; j++) {
+                match = selector.match(selectorBlackList[j]);
+                if (match) {
+                    break;
+                }
+            }
+            if (match) {
+                return;
+            }
 
             var rule = decl.parent;
             var value = decl.value;
