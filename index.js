@@ -23,17 +23,7 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
         css.eachDecl(function (decl, i) {
             if (propWhiteList.indexOf(decl.prop) === -1) return;
 
-            var selector = decl.parent.selector;
-            var match = false;
-            for (var j=0; j<selectorBlackList.length; j++) {
-                match = selector.match(selectorBlackList[j]);
-                if (match) {
-                    break;
-                }
-            }
-            if (match) {
-                return;
-            }
+            if (blacklistedSelector(selectorBlackList, decl.parent.selector)) return;
 
             var rule = decl.parent;
             var value = decl.value;
@@ -74,5 +64,11 @@ function toFixed(number, precision) {
 function remExists(decls, prop, value) {
     return decls.some(function (decl) {
         return (decl.prop === prop && decl.value === value);
+    });
+}
+
+function blacklistedSelector(blacklist, selector) {
+    return blacklist.some(function (regex) {
+        return selector.match(regex);
     });
 }
