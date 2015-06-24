@@ -49,6 +49,17 @@ describe('pxtorem', function () {
         expect(processed).toBe(expected);
     });
 
+    it('should ignore selectors in the selector black list', function () {
+        var rules = '.rule { font-size: 15px } .rule2 { font-size: 15px }';
+        var expected = '.rule { font-size: 0.9375rem } .rule2 { font-size: 15px }';
+        var options = {
+            selector_black_list: ['.rule2']
+        };
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
     it('should leave fallback pixel unit with root em value', function () {
         var options = {
             replace: false

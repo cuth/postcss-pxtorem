@@ -9,6 +9,7 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
         options = options || {};
         var rootValue = options.root_value || 16;
         var unitPrecision = options.unit_precision || 5;
+        var selectorBlackList = options.selector_black_list || [];
         var propWhiteList = options.prop_white_list || ['font', 'font-size', 'line-height', 'letter-spacing'];
         var replace = (options.replace === false) ? false : true;
         var mediaQuery = options.media_query || false;
@@ -21,6 +22,8 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
 
         css.eachDecl(function (decl, i) {
             if (propWhiteList !== 'all' && propWhiteList.indexOf(decl.prop) === -1) return;
+
+            if (blacklistedSelector(selectorBlackList, decl.parent.selector)) return;
 
             var rule = decl.parent;
             var value = decl.value;
@@ -61,5 +64,11 @@ function toFixed(number, precision) {
 function remExists(decls, prop, value) {
     return decls.some(function (decl) {
         return (decl.prop === prop && decl.value === value);
+    });
+}
+
+function blacklistedSelector(blacklist, selector) {
+    return blacklist.some(function (regex) {
+        return selector.match(regex);
     });
 }
