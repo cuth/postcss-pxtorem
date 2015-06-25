@@ -21,7 +21,7 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
         };
 
         css.eachDecl(function (decl, i) {
-            if (propWhiteList.indexOf(decl.prop) === -1) return;
+            if (propWhiteList.length && propWhiteList.indexOf(decl.prop) === -1) return;
 
             if (blacklistedSelector(selectorBlackList, decl.parent.selector)) return;
 

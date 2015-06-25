@@ -49,6 +49,17 @@ describe('pxtorem', function () {
         expect(processed).toBe(expected);
     });
 
+    it('should replace all properties when white list is empty', function () {
+        var rules = '.rule { margin: 16px; font-size: 15px }';
+        var expected = '.rule { margin: 1rem; font-size: 0.9375rem }';
+        var options = {
+            prop_white_list: []
+        };
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
     it('should ignore selectors in the selector black list', function () {
         var rules = '.rule { font-size: 15px } .rule2 { font-size: 15px }';
         var expected = '.rule { font-size: 0.9375rem } .rule2 { font-size: 15px }';
