@@ -14,6 +14,7 @@ module.exports = function (options) {
         var propWhiteList = options.prop_white_list || ['font', 'font-size', 'line-height', 'letter-spacing'];
         var replace = (options.replace === false) ? false : true;
         var mediaQuery = options.media_query || false;
+        var notTouchRootFontSize = (options.notTouchRootFontSize === false) ? false : true;
 
         var pxRegex = /(\d*\.?\d+)px/ig;
 
@@ -27,7 +28,7 @@ module.exports = function (options) {
             var rule = decl.parent;
             var value = decl.value;
 
-            if ( rule.selector.indexOf('html') !== -1 && (decl.prop == 'font-size' || decl.prop == 'font')) {
+            if (notTouchRootFontSize && rule.selector.indexOf('html') !== -1 && (decl.prop == 'font-size' || decl.prop == 'font')) {
                 decl.value = value.replace(pxRegex, rootValue + 'px');
                 return;
             }
