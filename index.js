@@ -68,6 +68,7 @@ function remExists(decls, prop, value) {
 }
 
 function blacklistedSelector(blacklist, selector) {
+    if (typeof selector !== 'string') return;
     return blacklist.some(function (regex) {
         return selector.match(regex);
     });
