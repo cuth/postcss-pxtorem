@@ -74,3 +74,19 @@ gulp.task('css', function () {
         .pipe(gulp.dest('build/css'));
 });
 ```
+
+### A message about ignoring properties
+Currently, the easiest way to have a single property ignored is to use a capital in the pixel unit declaration.
+
+```css
+// `px` is converted to `rem`
+.convert {
+    font-size: 16px; // converted to 1rem
+}
+
+// `Px` or `PX` is ignored by `postcss-pxtorem` but still accepted by browsers
+.ignore {
+    border: 1Px solid; // ignored
+    border-width: 2PX; // ignored
+}
+```
