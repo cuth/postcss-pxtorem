@@ -20,7 +20,7 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
             return toFixed((parseFloat($1) / rootValue), unitPrecision) + 'rem';
         };
 
-        css.eachDecl(function (decl, i) {
+        css.walkDecls(function (decl, i) {
             if (propWhiteList.length && propWhiteList.indexOf(decl.prop) === -1) return;
 
             if (blacklistedSelector(selectorBlackList, decl.parent.selector)) return;
@@ -43,8 +43,8 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
         });
 
         if (mediaQuery) {
-            css.each(function (rule) {
-                if (rule.type !== 'atrule' && rule.name !== 'media') return;
+            css.walkAtRules(function (rule) {
+                if (rule.name !== 'media') return;
 
                 if (rule.params.indexOf('px') !== -1) {
                     rule.params = rule.params.replace(pxRegex, pxReplace);
