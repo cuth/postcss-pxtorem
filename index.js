@@ -1,6 +1,7 @@
 'use strict';
 
 var postcss = require('postcss');
+var pxRegex = require('./lib/pixel-unit-regex');
 
 module.exports = postcss.plugin('postcss-pxtorem', function (options) {
 
@@ -14,9 +15,8 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
         var replace = (options.replace === false) ? false : true;
         var mediaQuery = options.media_query || false;
 
-        var pxRegex = /(\d*\.?\d+)px/ig;
-
         var pxReplace = function (m, $1) {
+            if (!$1) return m;
             return toFixed((parseFloat($1) / rootValue), unitPrecision) + 'rem';
         };
 

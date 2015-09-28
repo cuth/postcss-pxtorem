@@ -115,4 +115,26 @@ describe('pxtorem', function () {
 
         expect(processed).toBe(expected);
     });
+
+    it('should not replace values in double quotes or single quotes', function () {
+        var options = {
+            prop_white_list: []
+        };
+        var rules = '.rule { content: \'16px\'; font-family: "16px"; font-size: 16px; }';
+        var expected = '.rule { content: \'16px\'; font-family: "16px"; font-size: 1rem; }';
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should not replace values in `url()`', function () {
+        var options = {
+            prop_white_list: []
+        };
+        var rules = '.rule { background: url(16px.jpg); font-size: 16px; }';
+        var expected = '.rule { background: url(16px.jpg); font-size: 1rem; }';
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
 });
