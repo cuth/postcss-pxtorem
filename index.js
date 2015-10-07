@@ -23,7 +23,9 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
         css.walkDecls(function (decl, i) {
             if (propWhiteList.length && propWhiteList.indexOf(decl.prop) === -1) return;
 
-            if (blacklistedSelector(selectorBlackList, decl.parent.selector)) return;
+            if (decl.parent.selector) {
+                if (blacklistedSelector(selectorBlackList, decl.parent.selector)) return;
+            }
 
             var rule = decl.parent;
             var value = decl.value;
