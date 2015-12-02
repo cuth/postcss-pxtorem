@@ -28,7 +28,7 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
 
             var rule = decl.parent;
             var value = decl.value;
-            var onePxRegx = /[^\d]*1px/gi;
+            var onePxRegx = /([^0-9]+|^)1px/gi;
 
             if (!onePxReplace && onePxRegx.test(value)) {
                 return;
