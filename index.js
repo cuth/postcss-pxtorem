@@ -14,7 +14,7 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
         var propWhiteList = options.prop_white_list || ['font', 'font-size', 'line-height', 'letter-spacing'];
         var replace = (options.replace === false) ? false : true;
         var mediaQuery = options.media_query || false;
-        var onePxReplace = options.one_px_replace || true;
+        var onePxReplace = (options.one_px_replace === false) ? false : true;
 
         var pxReplace = function (m, $1) {
             if (!$1) return m;
