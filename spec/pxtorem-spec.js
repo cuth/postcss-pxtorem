@@ -12,6 +12,14 @@ var css = '.rule { font-size: 15px }';
 
 describe('pxtorem', function () {
 
+    it('should work on the readme example', function () {
+        var input = 'h1 { margin: 0 0 20px; font-size: 32px; line-height: 1.2; letter-spacing: 1px; }';
+        var output = 'h1 { margin: 0 0 20px; font-size: 2rem; line-height: 1.2; letter-spacing: 0.0625rem; }';
+        var processed = postcss(pxtorem()).process(input).css;
+
+        expect(processed).toBe(output);
+    });
+
     it('should replace the px unit with rem', function () {
         var processed = postcss(pxtorem()).process(css).css;
         var expected = '.rule { font-size: 0.9375rem }';

@@ -8,6 +8,28 @@ A plugin for [PostCSS](https://github.com/ai/postcss) that generates rem units f
 Pixels are the easiest unit to use (*opinion*). The only issue with them is that they don't let browsers change the default font size of 16. This script converts every px value to a rem from the properties you choose to allow the browser to set the font size.
 
 
+### Input/Output
+
+*With the default settings, only font related properties are targeted.*
+
+```css
+// input
+h1 {
+    margin: 0 0 20px;
+    font-size: 32px;
+    line-height: 1.2;
+    letter-spacing: 1px;
+}
+
+// output
+h1 {
+    margin: 0 0 20px;
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: 0.0625rem;
+}
+```
+
 ### Example
 
 ```js
@@ -51,11 +73,12 @@ Default:
 - `media_query` (Boolean) Allow px to be converted in media queries.
 
 
-### Use with gulp-postcss and autoprefixer-core
+### Use with gulp-postcss and autoprefixer
+
 ```js
 var gulp = require('gulp');
 var postcss = require('gulp-postcss');
-var autoprefixer = require('autoprefixer-core');
+var autoprefixer = require('autoprefixer');
 var pxtorem = require('postcss-pxtorem');
 
 gulp.task('css', function () {
