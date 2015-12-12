@@ -61,7 +61,8 @@ Default:
     prop_white_list: ['font', 'font-size', 'line-height', 'letter-spacing'],
     selector_black_list: [],
     replace: true,
-    media_query: false
+    media_query: false,
+    one_px_replace: true
 }
 ```
 
@@ -71,6 +72,7 @@ Default:
 - `selector_black_list` (Array) The selectors to ignore and leave as px.
 - `replace` (Boolean) replaces rules containing rems instead of adding fallbacks.
 - `media_query` (Boolean) Allow px to be converted in media queries.
+- `one_px_replace` (Boolean) Set whether replace 1px to rem
 
 
 ### Use with gulp-postcss and autoprefixer
