@@ -1,17 +1,19 @@
 {
+    "browser": true,
     "node": true,
     "bitwise": true,
     "camelcase": false,
     "curly": false,
     "eqeqeq": true,
+    "esnext": true,
     "immed": true,
     "indent": 4,
-    "latedef": "nofunc",
+    "latedef": false,
     "newcap": true,
     "nonbsp": true,
     "quotmark": "single",
     "undef": true,
     "unused": true,
-    "strict": true,
+    "strict": false,
     "trailing": true
 }
