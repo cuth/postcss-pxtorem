@@ -8,7 +8,7 @@
 'use strict';
 var postcss = require('postcss');
 var pxtorem = require('..');
-var css = '.rule { font-size: 15px }';
+var basicCSS = '.rule { font-size: 15px }';
 
 describe('pxtorem', function () {
 
@@ -21,8 +21,19 @@ describe('pxtorem', function () {
     });
 
     it('should replace the px unit with rem', function () {
-        var processed = postcss(pxtorem()).process(css).css;
+        var processed = postcss(pxtorem()).process(basicCSS).css;
         var expected = '.rule { font-size: 0.9375rem }';
+
+        expect(processed).toBe(expected);
+    });
+
+    // Deprecate
+    it('should replace using a root value of 10 - legacy', function () {
+        var expected = '.rule { font-size: 1.5rem }';
+        var options = {
+            root_value: 10
+        };
+        var processed = postcss(pxtorem(options)).process(basicCSS).css;
 
         expect(processed).toBe(expected);
     });
@@ -30,9 +41,20 @@ describe('pxtorem', function () {
     it('should replace using a root value of 10', function () {
         var expected = '.rule { font-size: 1.5rem }';
         var options = {
-            root_value: 10
+            rootValue: 10
         };
-        var processed = postcss(pxtorem(options)).process(css).css;
+        var processed = postcss(pxtorem(options)).process(basicCSS).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    // Deprecate
+    it('should replace using a decimal of 2 places - legacy', function () {
+        var expected = '.rule { font-size: 0.94rem }';
+        var options = {
+            unit_precision: 2
+        };
+        var processed = postcss(pxtorem(options)).process(basicCSS).css;
 
         expect(processed).toBe(expected);
     });
@@ -40,9 +62,20 @@ describe('pxtorem', function () {
     it('should replace using a decimal of 2 places', function () {
         var expected = '.rule { font-size: 0.94rem }';
         var options = {
-            unit_precision: 2
+            unitPrecision: 2
         };
-        var processed = postcss(pxtorem(options)).process(css).css;
+        var processed = postcss(pxtorem(options)).process(basicCSS).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    // Deprecate
+    it('should only replace properties in the white list - legacy', function () {
+        var expected = '.rule { font-size: 15px }';
+        var options = {
+            prop_white_list: ['font']
+        };
+        var processed = postcss(pxtorem(options)).process(basicCSS).css;
 
         expect(processed).toBe(expected);
     });
@@ -50,9 +83,9 @@ describe('pxtorem', function () {
     it('should only replace properties in the white list', function () {
         var expected = '.rule { font-size: 15px }';
         var options = {
-            prop_white_list: ['font']
+            propWhiteList: ['font']
         };
-        var processed = postcss(pxtorem(options)).process(css).css;
+        var processed = postcss(pxtorem(options)).process(basicCSS).css;
 
         expect(processed).toBe(expected);
     });
@@ -61,14 +94,15 @@ describe('pxtorem', function () {
         var rules = '.rule { margin: 16px; font-size: 15px }';
         var expected = '.rule { margin: 1rem; font-size: 0.9375rem }';
         var options = {
-            prop_white_list: []
+            propWhiteList: []
         };
         var processed = postcss(pxtorem(options)).process(rules).css;
 
         expect(processed).toBe(expected);
     });
 
-    it('should ignore selectors in the selector black list', function () {
+    // Deprecate
+    it('should ignore selectors in the selector black list - legacy', function () {
         var rules = '.rule { font-size: 15px } .rule2 { font-size: 15px }';
         var expected = '.rule { font-size: 0.9375rem } .rule2 { font-size: 15px }';
         var options = {
@@ -79,19 +113,41 @@ describe('pxtorem', function () {
         expect(processed).toBe(expected);
     });
 
+    it('should ignore selectors in the selector black list', function () {
+        var rules = '.rule { font-size: 15px } .rule2 { font-size: 15px }';
+        var expected = '.rule { font-size: 0.9375rem } .rule2 { font-size: 15px }';
+        var options = {
+            selectorBlackList: ['.rule2']
+        };
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
     it('should leave fallback pixel unit with root em value', function () {
         var options = {
             replace: false
         };
-        var processed = postcss(pxtorem(options)).process(css).css;
+        var processed = postcss(pxtorem(options)).process(basicCSS).css;
         var expected = '.rule { font-size: 15px; font-size: 0.9375rem }';
+
+        expect(processed).toBe(expected);
+    });
+
+    // Deprecate
+    it('should replace px in media queries', function () {
+        var options = {
+            media_query: true
+        };
+        var processed = postcss(pxtorem(options)).process('@media (min-width: 500px) { .rule { font-size: 16px } }').css;
+        var expected = '@media (min-width: 31.25rem) { .rule { font-size: 1rem } }';
 
         expect(processed).toBe(expected);
     });
 
     it('should replace px in media queries', function () {
         var options = {
-            media_query: true
+            mediaQuery: true
         };
         var processed = postcss(pxtorem(options)).process('@media (min-width: 500px) { .rule { font-size: 16px } }').css;
         var expected = '@media (min-width: 31.25rem) { .rule { font-size: 1rem } }';
@@ -110,7 +166,7 @@ describe('pxtorem', function () {
         var rules = '.rule { margin: 0.5rem .5px -0.2px -.2em }';
         var expected = '.rule { margin: 0.5rem 0.03125rem -0.0125rem -.2em }';
         var options = {
-            prop_white_list: ['margin']
+            propWhiteList: ['margin']
         };
         var processed = postcss(pxtorem(options)).process(rules).css;
 
@@ -126,7 +182,7 @@ describe('pxtorem', function () {
 
     it('should not replace values in double quotes or single quotes', function () {
         var options = {
-            prop_white_list: []
+            propWhiteList: []
         };
         var rules = '.rule { content: \'16px\'; font-family: "16px"; font-size: 16px; }';
         var expected = '.rule { content: \'16px\'; font-family: "16px"; font-size: 1rem; }';
@@ -137,10 +193,22 @@ describe('pxtorem', function () {
 
     it('should not replace values in `url()`', function () {
         var options = {
-            prop_white_list: []
+            propWhiteList: []
         };
         var rules = '.rule { background: url(16px.jpg); font-size: 16px; }';
         var expected = '.rule { background: url(16px.jpg); font-size: 1rem; }';
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should not replace values below minPixelValue', function () {
+        var options = {
+            propWhiteList: [],
+            minPixelValue: 2
+        };
+        var rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }';
+        var expected = '.rule { border: 1px solid #000; font-size: 1rem; margin: 1px 0.625rem; }';
         var processed = postcss(pxtorem(options)).process(rules).css;
 
         expect(processed).toBe(expected);
