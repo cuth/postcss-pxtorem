@@ -72,6 +72,10 @@ Default:
     - Set this to an empty array to disable the white list and enable all properties.
     - Values need to be exact matches.
 - `selectorBlackList` (Array) The selectors to ignore and leave as px.
+    - If value is string, it checks to see if selector contains the string.
+        - `['body']` will match `.body-class`
+    - If value is regexp, it checks to see if the selector matches the regexp.
+        - `[/^body$/]` will match `body` but not `.body`
 - `replace` (Boolean) replaces rules containing rems instead of adding fallbacks.
 - `mediaQuery` (Boolean) Allow px to be converted in media queries.
 - `minPixelValue` (Number) Set the minimum pixel value to replace.

@@ -95,6 +95,7 @@ function declarationExists(decls, prop, value) {
 function blacklistedSelector(blacklist, selector) {
     if (typeof selector !== 'string') return;
     return blacklist.some(function (regex) {
+        if (typeof regex === 'string') return selector.indexOf(regex) !== -1;
         return selector.match(regex);
     });
 }
