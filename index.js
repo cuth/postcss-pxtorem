@@ -20,7 +20,7 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
             return toFixed((parseFloat($1) / rootValue), unitPrecision) + 'rem';
         };
 
-        css.eachDecl(function (decl, i) {
+        css.walkDecls(function (decl, i) {
             if (propWhiteList !== 'all' && propWhiteList.indexOf(decl.prop) === -1) return;
 
             if (blacklistedSelector(selectorBlackList, decl.parent.selector)) return;
