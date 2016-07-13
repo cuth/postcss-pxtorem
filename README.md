@@ -8,6 +8,28 @@ A plugin for [PostCSS](https://github.com/ai/postcss) that generates rem units f
 Pixels are the easiest unit to use (*opinion*). The only issue with them is that they don't let browsers change the default font size of 16. This script converts every px value to a rem from the properties you choose to allow the browser to set the font size.
 
 
+### Input/Output
+
+*With the default settings, only font related properties are targeted.*
+
+```css
+// input
+h1 {
+    margin: 0 0 20px;
+    font-size: 32px;
+    line-height: 1.2;
+    letter-spacing: 1px;
+}
+
+// output
+h1 {
+    margin: 0 0 20px;
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: 0.0625rem;
+}
+```
+
 ### Example
 
 ```js
@@ -34,28 +56,37 @@ Type: `Object | Null`
 Default:
 ```js
 {
-    root_value: 16,
-    unit_precision: 5,
-    prop_white_list: ['font', 'font-size', 'line-height', 'letter-spacing'],
-    selector_black_list: [],
+    rootValue: 16,
+    unitPrecision: 5,
+    propWhiteList: ['font', 'font-size', 'line-height', 'letter-spacing'],
+    selectorBlackList: [],
     replace: true,
-    media_query: false
+    mediaQuery: false,
+    minPixelValue: 0
 }
 ```
 
-- `root_value` (Number) The root element font size.
-- `unit_precision` (Number) The decimal numbers to allow the REM units to grow to.
-- `prop_white_list` (Array) The properties that can change from px to rem, or (String) `'all'` to change all properties.
-- `selector_black_list` (Array) The selectors to ignore and leave as px.
+- `rootValue` (Number) The root element font size.
+- `unitPrecision` (Number) The decimal numbers to allow the REM units to grow to.
+- `propWhiteList` (Array) The properties that can change from px to rem.
+    - Set this to an empty array to disable the white list and enable all properties.
+    - Values need to be exact matches.
+- `selectorBlackList` (Array) The selectors to ignore and leave as px.
+    - If value is string, it checks to see if selector contains the string.
+        - `['body']` will match `.body-class`
+    - If value is regexp, it checks to see if the selector matches the regexp.
+        - `[/^body$/]` will match `body` but not `.body`
 - `replace` (Boolean) replaces rules containing rems instead of adding fallbacks.
-- `media_query` (Boolean) Allow px to be converted in media queries.
+- `mediaQuery` (Boolean) Allow px to be converted in media queries.
+- `minPixelValue` (Number) Set the minimum pixel value to replace.
 
 
-### Use with gulp-postcss and autoprefixer-core
+### Use with gulp-postcss and autoprefixer
+
 ```js
 var gulp = require('gulp');
 var postcss = require('gulp-postcss');
-var autoprefixer = require('autoprefixer-core');
+var autoprefixer = require('autoprefixer');
 var pxtorem = require('postcss-pxtorem');
 
 gulp.task('css', function () {
@@ -73,4 +104,20 @@ gulp.task('css', function () {
         .pipe(postcss(processors))
         .pipe(gulp.dest('build/css'));
 });
+```
+
+### A message about ignoring properties
+Currently, the easiest way to have a single property ignored is to use a capital in the pixel unit declaration.
+
+```css
+// `px` is converted to `rem`
+.convert {
+    font-size: 16px; // converted to 1rem
+}
+
+// `Px` or `PX` is ignored by `postcss-pxtorem` but still accepted by browsers
+.ignore {
+    border: 1Px solid; // ignored
+    border-width: 2PX; // ignored
+}
 ```
