@@ -9,6 +9,7 @@ var defaults = {
     unitPrecision: 5,
     selectorBlackList: [],
     propWhiteList: ['font', 'font-size', 'line-height', 'letter-spacing'],
+    propBlackList: [],
     replace: true,
     mediaQuery: false,
     minPixelValue: 0
@@ -29,13 +30,17 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
     var opts = objectAssign({}, defaults, options);
     var pxReplace = createPxReplace(opts.rootValue, opts.unitPrecision, opts.minPixelValue);
 
+    var hasWhiteList = !!opts.propWhiteList.length;
+    var hasBlackList = !!opts.propBlackList.length;
+
     return function (css) {
 
         css.walkDecls(function (decl, i) {
             // This should be the fastest test and will remove most declarations
             if (decl.value.indexOf('px') === -1) return;
 
-            if (opts.propWhiteList.length && opts.propWhiteList.indexOf(decl.prop) === -1) return;
+            if (hasWhiteList && opts.propWhiteList.indexOf(decl.prop) === -1) return;
+            if (hasBlackList && opts.propBlackList.indexOf(decl.prop) !== -1) return;
 
             if (blacklistedSelector(opts.selectorBlackList, decl.parent.selector)) return;
 
