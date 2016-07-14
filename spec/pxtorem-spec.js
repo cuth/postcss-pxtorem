@@ -125,30 +125,76 @@ describe('unitPrecision', function () {
 describe('propWhiteList', function () {
     // Deprecate
     it('should only replace properties in the white list - legacy', function () {
-        var expected = '.rule { font-size: 15px }';
+        var rules = '.rule { margin: 16px; font-size: 15px }';
+        var expected = '.rule { margin: 16px; font-size: 0.9375rem }';
         var options = {
-            prop_white_list: ['font']
+            prop_white_list: ['font-size']
         };
-        var processed = postcss(pxtorem(options)).process(basicCSS).css;
+        var processed = postcss(pxtorem(options)).process(rules).css;
 
         expect(processed).toBe(expected);
     });
 
     it('should only replace properties in the white list', function () {
-        var expected = '.rule { font-size: 15px }';
+        var rules = '.rule { margin: 16px; font-size: 15px }';
+        var expected = '.rule { margin: 16px; font-size: 0.9375rem }';
         var options = {
-            propWhiteList: ['font']
+            propWhiteList: ['font-size']
         };
-        var processed = postcss(pxtorem(options)).process(basicCSS).css;
+        var processed = postcss(pxtorem(options)).process(rules).css;
 
         expect(processed).toBe(expected);
     });
 
-    it('should replace all properties when white list is empty', function () {
+    it('should replace all properties if the white list is an empty array', function () {
         var rules = '.rule { margin: 16px; font-size: 15px }';
         var expected = '.rule { margin: 1rem; font-size: 0.9375rem }';
         var options = {
             propWhiteList: []
+        };
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should replace all properties if the white list is an empty array, except those on the black list', function () {
+        var rules = '.rule { margin: 16px; font-size: 15px }';
+        var expected = '.rule { margin: 1rem; font-size: 15px }';
+        var options = {
+            propWhiteList: [],
+            propBlackList: ['font-size']
+        };
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should replace default properties when there is no white or black list', function () {
+        var rules = '.rule { margin: 16px; font: 17px; font-size: 15px; line-height: 16px; letter-spacing: 1px }';
+        var expected = '.rule { margin: 16px; font: 1.0625rem; font-size: 0.9375rem; line-height: 1rem; letter-spacing: 0.0625rem }';
+        var options = {};
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should not replace default properties when they are on the black list', function () {
+        var rules = '.rule { margin: 16px; font-size: 15px }';
+        var expected = '.rule { margin: 16px; font-size: 15px }';
+        var options = {
+            propBlackList: ['font-size']
+        };
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should not replace properties if they are on the black list, even if they are on the white list', function () {
+        var rules = '.rule { margin: 16px; font-size: 15px }';
+        var expected = '.rule { margin: 16px; font-size: 15px }';
+        var options = {
+            propWhiteList: ['font-size'],
+            propBlackList: ['font-size']
         };
         var processed = postcss(pxtorem(options)).process(rules).css;
 
