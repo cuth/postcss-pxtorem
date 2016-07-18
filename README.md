@@ -58,7 +58,7 @@ Default:
 {
     rootValue: 16,
     unitPrecision: 5,
-    propWhiteList: ['font', 'font-size', 'line-height', 'letter-spacing'],
+    propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
     selectorBlackList: [],
     replace: true,
     mediaQuery: false,
@@ -68,9 +68,14 @@ Default:
 
 - `rootValue` (Number) The root element font size.
 - `unitPrecision` (Number) The decimal numbers to allow the REM units to grow to.
-- `propWhiteList` (Array) The properties that can change from px to rem.
-    - Set this to an empty array to disable the white list and enable all properties.
+- `propList` (Array) The properties that can change from px to rem.
     - Values need to be exact matches.
+    - Use wildcard `*` to enable all properties. Example: `['*']`
+    - Use `~` to match any part of the property. (`['~position']` will match `background-position-y`)
+    - Use `^` to match the start of the property. (`['^font']` will match `font-weight`)
+    - Use `$` to match the end of the property. (`['$-radius']` will match `border-top-right-radius`)
+    - Use `!` to not match a property. Example: `['*', '!letter-spacing']`
+    - Combine the "not" prefix with the other prefixes. Example: `['*', '!~margin']` 
 - `selectorBlackList` (Array) The selectors to ignore and leave as px.
     - If value is string, it checks to see if selector contains the string.
         - `['body']` will match `.body-class`
