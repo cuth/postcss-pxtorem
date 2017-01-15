@@ -9,6 +9,7 @@
 var postcss = require('postcss');
 var pxtorem = require('..');
 var basicCSS = '.rule { font-size: 15px }';
+var filterPropList = require('../lib/filter-prop-list');
 
 describe('pxtorem', function () {
     it('should work on the readme example', function () {
@@ -33,11 +34,22 @@ describe('pxtorem', function () {
         expect(processed).toBe(expected);
     });
 
-    it('should handle < 1 values and values without a leading 0', function () {
+    it('should handle < 1 values and values without a leading 0 - legacy', function () {
         var rules = '.rule { margin: 0.5rem .5px -0.2px -.2em }';
         var expected = '.rule { margin: 0.5rem 0.03125rem -0.0125rem -.2em }';
         var options = {
             propWhiteList: ['margin']
+        };
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should handle < 1 values and values without a leading 0', function () {
+        var rules = '.rule { margin: 0.5rem .5px -0.2px -.2em }';
+        var expected = '.rule { margin: 0.5rem 0.03125rem -0.0125rem -.2em }';
+        var options = {
+            propList: ['margin']
         };
         var processed = postcss(pxtorem(options)).process(rules).css;
 
@@ -50,10 +62,17 @@ describe('pxtorem', function () {
 
         expect(processed).toBe(expected);
     });
+
+    it('should remain unitless if 0', function () {
+        var expected = '.rule { font-size: 0px; font-size: 0; }';
+        var processed = postcss(pxtorem()).process(expected).css;
+
+        expect(processed).toBe(expected);
+    });
 });
 
 describe('value parsing', function () {
-    it('should not replace values in double quotes or single quotes', function () {
+    it('should not replace values in double quotes or single quotes - legacy', function () {
         var options = {
             propWhiteList: []
         };
@@ -64,9 +83,31 @@ describe('value parsing', function () {
         expect(processed).toBe(expected);
     });
 
-    it('should not replace values in `url()`', function () {
+    it('should not replace values in double quotes or single quotes', function () {
+        var options = {
+            propList: ['*']
+        };
+        var rules = '.rule { content: \'16px\'; font-family: "16px"; font-size: 16px; }';
+        var expected = '.rule { content: \'16px\'; font-family: "16px"; font-size: 1rem; }';
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should not replace values in `url()` - legacy', function () {
         var options = {
             propWhiteList: []
+        };
+        var rules = '.rule { background: url(16px.jpg); font-size: 16px; }';
+        var expected = '.rule { background: url(16px.jpg); font-size: 1rem; }';
+        var processed = postcss(pxtorem(options)).process(rules).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should not replace values in `url()`', function () {
+        var options = {
+            propList: ['*']
         };
         var rules = '.rule { background: url(16px.jpg); font-size: 16px; }';
         var expected = '.rule { background: url(16px.jpg); font-size: 1rem; }';
@@ -134,12 +175,45 @@ describe('propWhiteList', function () {
         expect(processed).toBe(expected);
     });
 
-    it('should only replace properties in the white list', function () {
+    it('should only replace properties in the white list - legacy', function () {
         var expected = '.rule { font-size: 15px }';
         var options = {
             propWhiteList: ['font']
         };
         var processed = postcss(pxtorem(options)).process(basicCSS).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should only replace properties in the white list - legacy', function () {
+        var css = '.rule { margin: 16px; margin-left: 10px }';
+        var expected = '.rule { margin: 1rem; margin-left: 10px }';
+        var options = {
+            propWhiteList: ['margin']
+        };
+        var processed = postcss(pxtorem(options)).process(css).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should only replace properties in the prop list', function () {
+        var css = '.rule { font-size: 16px; margin: 16px; margin-left: 5px; padding: 5px; padding-right: 16px }';
+        var expected = '.rule { font-size: 1rem; margin: 1rem; margin-left: 5px; padding: 5px; padding-right: 1rem }';
+        var options = {
+            propWhiteList: ['*font*', 'margin*', '!margin-left', '*-right', 'pad']
+        };
+        var processed = postcss(pxtorem(options)).process(css).css;
+
+        expect(processed).toBe(expected);
+    });
+
+    it('should only replace properties in the prop list with wildcard', function () {
+        var css = '.rule { font-size: 16px; margin: 16px; margin-left: 5px; padding: 5px; padding-right: 16px }';
+        var expected = '.rule { font-size: 16px; margin: 1rem; margin-left: 5px; padding: 5px; padding-right: 16px }';
+        var options = {
+            propWhiteList: ['*', '!margin-left', '!*padding*', '!font*']
+        };
+        var processed = postcss(pxtorem(options)).process(css).css;
 
         expect(processed).toBe(expected);
     });
@@ -249,5 +323,55 @@ describe('minPixelValue', function () {
         var processed = postcss(pxtorem(options)).process(rules).css;
 
         expect(processed).toBe(expected);
+    });
+});
+
+describe('filter-prop-list', function () {
+    it('should find "exact" matches from propList', function () {
+        var propList = ['font-size', 'margin', '!padding', '*border*', '*', '*y', '!*font*'];
+        var expected = 'font-size,margin';
+        expect(filterPropList.exact(propList).join()).toBe(expected);
+    });
+
+    it('should find "contain" matches from propList and reduce to string', function () {
+        var propList = ['font-size', '*margin*', '!padding', '*border*', '*', '*y', '!*font*'];
+        var expected = 'margin,border';
+        expect(filterPropList.contain(propList).join()).toBe(expected);
+    });
+
+    it('should find "start" matches from propList and reduce to string', function () {
+        var propList = ['font-size', '*margin*', '!padding', 'border*', '*', '*y', '!*font*'];
+        var expected = 'border';
+        expect(filterPropList.startWith(propList).join()).toBe(expected);
+    });
+
+    it('should find "end" matches from propList and reduce to string', function () {
+        var propList = ['font-size', '*margin*', '!padding', 'border*', '*', '*y', '!*font*'];
+        var expected = 'y';
+        expect(filterPropList.endWith(propList).join()).toBe(expected);
+    });
+
+    it('should find "not" matches from propList and reduce to string', function () {
+        var propList = ['font-size', '*margin*', '!padding', 'border*', '*', '*y', '!*font*'];
+        var expected = 'padding';
+        expect(filterPropList.notExact(propList).join()).toBe(expected);
+    });
+
+    it('should find "not contain" matches from propList and reduce to string', function () {
+        var propList = ['font-size', '*margin*', '!padding', '!border*', '*', '*y', '!*font*'];
+        var expected = 'font';
+        expect(filterPropList.notContain(propList).join()).toBe(expected);
+    });
+
+    it('should find "not start" matches from propList and reduce to string', function () {
+        var propList = ['font-size', '*margin*', '!padding', '!border*', '*', '*y', '!*font*'];
+        var expected = 'border';
+        expect(filterPropList.notStartWith(propList).join()).toBe(expected);
+    });
+
+    it('should find "not end" matches from propList and reduce to string', function () {
+        var propList = ['font-size', '*margin*', '!padding', '!border*', '*', '!*y', '!*font*'];
+        var expected = 'y';
+        expect(filterPropList.notEndWith(propList).join()).toBe(expected);
     });
 });

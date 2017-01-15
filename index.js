@@ -1,14 +1,15 @@
 'use strict';
 
 var postcss = require('postcss');
-var pxRegex = require('./lib/pixel-unit-regex');
 var objectAssign = require('object-assign');
+var pxRegex = require('./lib/pixel-unit-regex');
+var filterPropList = require('./lib/filter-prop-list');
 
 var defaults = {
     rootValue: 16,
     unitPrecision: 5,
     selectorBlackList: [],
-    propWhiteList: ['font', 'font-size', 'line-height', 'letter-spacing'],
+    propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
     replace: true,
     mediaQuery: false,
     minPixelValue: 0
@@ -18,8 +19,9 @@ var legacyOptions = {
     'root_value': 'rootValue',
     'unit_precision': 'unitPrecision',
     'selector_black_list': 'selectorBlackList',
-    'prop_white_list': 'propWhiteList',
-    'media_query': 'mediaQuery'
+    'prop_white_list': 'propList',
+    'media_query': 'mediaQuery',
+    'propWhiteList': 'propList'
 };
 
 module.exports = postcss.plugin('postcss-pxtorem', function (options) {
@@ -29,13 +31,15 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
     var opts = objectAssign({}, defaults, options);
     var pxReplace = createPxReplace(opts.rootValue, opts.unitPrecision, opts.minPixelValue);
 
+    var satisfyPropList = createPropListMatcher(opts.propList);
+
     return function (css) {
 
         css.walkDecls(function (decl, i) {
             // This should be the fastest test and will remove most declarations
             if (decl.value.indexOf('px') === -1) return;
 
-            if (opts.propWhiteList.length && opts.propWhiteList.indexOf(decl.prop) === -1) return;
+            if (!satisfyPropList(decl.prop)) return;
 
             if (blacklistedSelector(opts.selectorBlackList, decl.parent.selector)) return;
 
@@ -63,6 +67,17 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
 
 function convertLegacyOptions(options) {
     if (typeof options !== 'object') return;
+    if (
+            (
+                (typeof options['prop_white_list'] !== 'undefined' && options['prop_white_list'].length === 0) ||
+                (typeof options.propWhiteList !== 'undefined' && options.propWhiteList.length === 0)
+            ) &&
+            typeof options.propList === 'undefined'
+        ) {
+        options.propList = ['*'];
+        delete options['prop_white_list'];
+        delete options.propWhiteList;
+    }
     Object.keys(legacyOptions).forEach(function (key) {
         if (options.hasOwnProperty(key)) {
             options[legacyOptions[key]] = options[key];
@@ -76,7 +91,8 @@ function createPxReplace (rootValue, unitPrecision, minPixelValue) {
         if (!$1) return m;
         var pixels = parseFloat($1);
         if (pixels < minPixelValue) return m;
-        return toFixed((pixels / rootValue), unitPrecision) + 'rem';
+        var fixedVal = toFixed((pixels / rootValue), unitPrecision);
+        return (fixedVal === 0) ? '0' : fixedVal + 'rem';
     };
 }
 
@@ -98,4 +114,49 @@ function blacklistedSelector(blacklist, selector) {
         if (typeof regex === 'string') return selector.indexOf(regex) !== -1;
         return selector.match(regex);
     });
+}
+
+function createPropListMatcher(propList) {
+    var hasWild = propList.indexOf('*') > -1;
+    var matchAll = (hasWild && propList.length === 1);
+    var lists = {
+        exact: filterPropList.exact(propList),
+        contain: filterPropList.contain(propList),
+        startWith: filterPropList.startWith(propList),
+        endWith: filterPropList.endWith(propList),
+        notExact: filterPropList.notExact(propList),
+        notContain: filterPropList.notContain(propList),
+        notStartWith: filterPropList.notStartWith(propList),
+        notEndWith: filterPropList.notEndWith(propList)
+    };
+    return function (prop) {
+        if (matchAll) return true;
+        return (
+            (
+                hasWild ||
+                lists.exact.indexOf(prop) > -1 ||
+                lists.contain.some(function (m) {
+                    return prop.indexOf(m) > -1;
+                }) ||
+                lists.startWith.some(function (m) {
+                    return prop.indexOf(m) === 0;
+                }) ||
+                lists.endWith.some(function (m) {
+                    return prop.indexOf(m) === prop.length - m.length;
+                })
+            ) &&
+            !(
+                lists.notExact.indexOf(prop) > -1 ||
+                lists.notContain.some(function (m) {
+                    return prop.indexOf(m) > -1;
+                }) ||
+                lists.notStartWith.some(function (m) {
+                    return prop.indexOf(m) === 0;
+                }) ||
+                lists.notEndWith.some(function (m) {
+                    return prop.indexOf(m) === prop.length - m.length;
+                })
+            )
+        );
+    };
 }
