@@ -91,7 +91,8 @@ function createPxReplace (rootValue, unitPrecision, minPixelValue) {
         if (!$1) return m;
         var pixels = parseFloat($1);
         if (pixels < minPixelValue) return m;
-        return toFixed((pixels / rootValue), unitPrecision) + 'rem';
+        var fixedVal = toFixed((pixels / rootValue), unitPrecision);
+        return (fixedVal === 0) ? '0' : fixedVal + 'rem';
     };
 }
 
@@ -121,12 +122,12 @@ function createPropListMatcher(propList) {
     var lists = {
         exact: filterPropList.exact(propList),
         contain: filterPropList.contain(propList),
-        start: filterPropList.start(propList),
-        end: filterPropList.end(propList),
-        not: filterPropList.not(propList),
+        startWith: filterPropList.startWith(propList),
+        endWith: filterPropList.endWith(propList),
+        notExact: filterPropList.notExact(propList),
         notContain: filterPropList.notContain(propList),
-        notStart: filterPropList.notStart(propList),
-        notEnd: filterPropList.notEnd(propList)
+        notStartWith: filterPropList.notStartWith(propList),
+        notEndWith: filterPropList.notEndWith(propList)
     };
     return function (prop) {
         if (matchAll) return true;
@@ -137,22 +138,22 @@ function createPropListMatcher(propList) {
                 lists.contain.some(function (m) {
                     return prop.indexOf(m) > -1;
                 }) ||
-                lists.start.some(function (m) {
+                lists.startWith.some(function (m) {
                     return prop.indexOf(m) === 0;
                 }) ||
-                lists.end.some(function (m) {
+                lists.endWith.some(function (m) {
                     return prop.indexOf(m) === prop.length - m.length;
                 })
             ) &&
             !(
-                lists.not.indexOf(prop) > -1 ||
+                lists.notExact.indexOf(prop) > -1 ||
                 lists.notContain.some(function (m) {
                     return prop.indexOf(m) > -1;
                 }) ||
-                lists.notStart.some(function (m) {
+                lists.notStartWith.some(function (m) {
                     return prop.indexOf(m) === 0;
                 }) ||
-                lists.notEnd.some(function (m) {
+                lists.notEndWith.some(function (m) {
                     return prop.indexOf(m) === prop.length - m.length;
                 })
             )

@@ -71,11 +71,9 @@ Default:
 - `propList` (Array) The properties that can change from px to rem.
     - Values need to be exact matches.
     - Use wildcard `*` to enable all properties. Example: `['*']`
-    - Use `~` to match any part of the property. (`['~position']` will match `background-position-y`)
-    - Use `^` to match the start of the property. (`['^font']` will match `font-weight`)
-    - Use `$` to match the end of the property. (`['$-radius']` will match `border-top-right-radius`)
+    - Use `*` at the start or end of a word. (`['*position*']` will match `background-position-y`)
     - Use `!` to not match a property. Example: `['*', '!letter-spacing']`
-    - Combine the "not" prefix with the other prefixes. Example: `['*', '!~margin']` 
+    - Combine the "not" prefix with the other prefixes. Example: `['*', '!font*']` 
 - `selectorBlackList` (Array) The selectors to ignore and leave as px.
     - If value is string, it checks to see if selector contains the string.
         - `['body']` will match `.body-class`
