@@ -120,8 +120,8 @@ describe('value parsing', function () {
         var options = {
             propList: ['*']
         };
-        var rules = '.rule { width: calc(100% - 16PX); height: calc(100% - 20px); font-size: 12Px; line-height: 16px; }';
-        var expected = '.rule { width: calc(100% - 16PX); height: calc(100% - 1.25rem); font-size: 12Px; line-height: 1rem; }';
+        var rules = '.rule { margin: 12px calc(100% - 14PX); height: calc(100% - 20px); font-size: 12Px; line-height: 16px; }';
+        var expected = '.rule { margin: 0.75rem calc(100% - 14PX); height: calc(100% - 1.25rem); font-size: 12Px; line-height: 1rem; }';
         var processed = postcss(pxtorem(options)).process(rules).css;
 
         expect(processed).toBe(expected);
