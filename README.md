@@ -2,6 +2,11 @@
 
 A plugin for [PostCSS](https://github.com/ai/postcss) that generates rem units from pixel units.
 
+## Install
+
+```shell
+$ npm install postcss-pxtorem --save-dev
+```
 
 ## Usage
 
