@@ -29,7 +29,7 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
     convertLegacyOptions(options);
 
     var opts = objectAssign({}, defaults, options);
-    var pxReplace = createPxReplace(opts.rootValue, opts.unitPrecision, opts.minPixelValue);
+    var pxReplace = createPxReplace(opts.rootValue, opts.unitPrecision, opts.minPixelValue, opts.replace);
 
     var satisfyPropList = createPropListMatcher(opts.propList);
 
@@ -86,13 +86,17 @@ function convertLegacyOptions(options) {
     });
 }
 
-function createPxReplace (rootValue, unitPrecision, minPixelValue) {
-    return function (m, $1) {
+function createPxReplace(rootValue, unitPrecision, minPixelValue, pxReplace) {
+    return function(m, $1) {
         if (!$1) return m;
         var pixels = parseFloat($1);
         if (pixels < minPixelValue) return m;
         var fixedVal = toFixed((pixels / rootValue), unitPrecision);
-        return (fixedVal === 0) ? '0' : fixedVal + 'rem';
+        if (pxReplace) {
+            return (fixedVal === 0) ? '0' : fixedVal + 'rem';
+        } else {
+            return (fixedVal === 0) ? '0' : ' ' + fixedVal + 'rem';
+        }
     };
 }
 
