@@ -388,22 +388,29 @@ describe('filter-prop-list', function () {
 });
 
 describe('exclude', function () {
-    it('should ignore file path with /exclude/', function () {
+    it('should ignore file path with exclude RegEx', function () {
         var options = {
             exclude: /exclude/i
         };
         var processed = postcss(pxtorem(options)).process(basicCSS, { from: 'exclude/path' }).css;
-
         expect(processed).toBe(basicCSS);
     });
 
-    it('should ignore file path with /exclude/', function () {
+    it('should not ignore file path with exclude String', function () {
         var options = {
-            exclude: /exclude/i
+            exclude: 'exclude'
         };
-        var processed = postcss(pxtorem(options)).process(basicCSS, { from: 'not/path' }).css;
-        var expected = '.rule { font-size: 0.9375rem }';
+        var processed = postcss(pxtorem(options)).process(basicCSS, { from: 'exclude/path' }).css;
+        expect(processed).toBe(basicCSS);
+    });
 
-        expect(processed).toBe(expected);
+    it('should not ignore file path with exclude function', function () {
+        var options = {
+            exclude: function (file) {
+                return file.indexOf('exclude') !== -1;
+            }
+        };
+        var processed = postcss(pxtorem(options)).process(basicCSS, { from: 'exclude/path' }).css;
+        expect(processed).toBe(basicCSS);
     });
 });

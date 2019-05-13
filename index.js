@@ -4,6 +4,7 @@ var postcss = require('postcss');
 var objectAssign = require('object-assign');
 var pxRegex = require('./lib/pixel-unit-regex');
 var filterPropList = require('./lib/filter-prop-list');
+var type = require('./lib/type');
 
 var defaults = {
     rootValue: 16,
@@ -35,13 +36,14 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
     var satisfyPropList = createPropListMatcher(opts.propList);
 
     return function (css) {
-        if(opts.exclude) {
-            var filePath = css.source.input.file;
-            if (typeof opts.exclude === 'string') {
-                if(filePath.indexOf(opts.exclude) !== -1) {
-                    return;
-                }
-            } else if(filePath.match(opts.exclude) !== null){
+        var exclude = opts.exclude;
+        var filePath = css.source.input.file;
+        if(exclude) {
+            if(type.isFunction(exclude) && exclude(filePath)) {
+                return;
+            } else if (type.isString(exclude) && filePath.indexOf(exclude) !== -1) {
+                return;
+            } else if(filePath.match(exclude) !== null){
                 return;
             }
         }

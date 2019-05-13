@@ -67,7 +67,8 @@ Default:
     selectorBlackList: [],
     replace: true,
     mediaQuery: false,
-    minPixelValue: 0
+    minPixelValue: 0,
+    exclude: /node_modules/i
 }
 ```
 
@@ -87,7 +88,14 @@ Default:
 - `replace` (Boolean) replaces rules containing rems instead of adding fallbacks.
 - `mediaQuery` (Boolean) Allow px to be converted in media queries.
 - `minPixelValue` (Number) Set the minimum pixel value to replace.
-
+- `exclude` (String, Regexp, Function) The file path to ignore and leave as px.
+    - If value is string, it checks to see if file path contains the string.
+        - `'exclude'` will match `\project\postcss-pxtorem\exclude\path`
+    - If value is regexp, it checks to see if file path matches the regexp.
+        - `/exclude/i` will match `\project\postcss-pxtorem\exclude\path`
+    - If value is function, you can use exclude function to return a true and the file will be ignored.
+        - the callback will pass the file path as  a parameter, it should returns a Boolean result.
+        - `function (file) { return file.indexOf('exclude') !== -1; }`
 
 ### Use with gulp-postcss and autoprefixer
 
