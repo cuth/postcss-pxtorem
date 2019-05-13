@@ -12,7 +12,8 @@ var defaults = {
     propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
     replace: true,
     mediaQuery: false,
-    minPixelValue: 0
+    minPixelValue: 0,
+    exclude: null
 };
 
 var legacyOptions = {
@@ -34,6 +35,16 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
     var satisfyPropList = createPropListMatcher(opts.propList);
 
     return function (css) {
+        if(opts.exclude) {
+            var filePath = css.source.input.file;
+            if (typeof opts.exclude === 'string') {
+                if(filePath.indexOf(opts.exclude) !== -1) {
+                    return;
+                }
+            } else if(filePath.match(opts.exclude) !== null){
+                return;
+            }
+        }
 
         css.walkDecls(function (decl, i) {
             // This should be the fastest test and will remove most declarations

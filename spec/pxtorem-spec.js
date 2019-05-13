@@ -386,3 +386,24 @@ describe('filter-prop-list', function () {
         expect(filterPropList.notEndWith(propList).join()).toBe(expected);
     });
 });
+
+describe('exclude', function () {
+    it('should ignore file path with /exclude/', function () {
+        var options = {
+            exclude: /exclude/i
+        };
+        var processed = postcss(pxtorem(options)).process(basicCSS, { from: 'exclude/path' }).css;
+
+        expect(processed).toBe(basicCSS);
+    });
+
+    it('should ignore file path with /exclude/', function () {
+        var options = {
+            exclude: /exclude/i
+        };
+        var processed = postcss(pxtorem(options)).process(basicCSS, { from: 'not/path' }).css;
+        var expected = '.rule { font-size: 0.9375rem }';
+
+        expect(processed).toBe(expected);
+    });
+});
