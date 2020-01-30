@@ -29,11 +29,13 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
     convertLegacyOptions(options);
 
     var opts = objectAssign({}, defaults, options);
-    var pxReplace = createPxReplace(opts.rootValue, opts.unitPrecision, opts.minPixelValue);
 
     var satisfyPropList = createPropListMatcher(opts.propList);
 
     return function (css) {
+
+        var rootValue = typeof opts.rootValue === 'function' ? opts.rootValue(css.source.input) : opts.rootValue;
+        var pxReplace = createPxReplace(rootValue, opts.unitPrecision, opts.minPixelValue);
 
         css.walkDecls(function (decl, i) {
             // This should be the fastest test and will remove most declarations

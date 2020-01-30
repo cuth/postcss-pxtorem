@@ -71,7 +71,7 @@ Default:
 }
 ```
 
-- `rootValue` (Number) The root element font size.
+- `rootValue` (Number | Function) Represents the root element font size or returns the root element font size based on the [`input`](https://api.postcss.org/Input.html) parameter
 - `unitPrecision` (Number) The decimal numbers to allow the REM units to grow to.
 - `propList` (Array) The properties that can change from px to rem.
     - Values need to be exact matches.
@@ -84,7 +84,7 @@ Default:
         - `['body']` will match `.body-class`
     - If value is regexp, it checks to see if the selector matches the regexp.
         - `[/^body$/]` will match `body` but not `.body`
-- `replace` (Boolean) replaces rules containing rems instead of adding fallbacks.
+- `replace` (Boolean) Replaces rules containing rems instead of adding fallbacks.
 - `mediaQuery` (Boolean) Allow px to be converted in media queries.
 - `minPixelValue` (Number) Set the minimum pixel value to replace.
 
