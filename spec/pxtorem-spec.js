@@ -149,6 +149,24 @@ describe('rootValue', function () {
 
         expect(processed).toBe(expected);
     });
+
+    it('should replace using different root values with different files', function () {
+        var css2 = '.rule { font-size: 20px }';
+        var expected = '.rule { font-size: 1rem }';
+        var options = {
+            rootValue: function (input) {
+                if (input.from.indexOf('basic.css') !== -1) {
+                    return 15;
+                }
+                return 20;
+            }
+        };
+        var processed1 = postcss(pxtorem(options)).process(basicCSS, { from: '/tmp/basic.css' }).css;
+        var processed2 = postcss(pxtorem(options)).process(css2, { from: '/tmp/whatever.css' }).css;
+
+        expect(processed1).toBe(expected);
+        expect(processed2).toBe(expected);
+    });
 });
 
 describe('unitPrecision', function () {
