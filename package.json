@@ -11,7 +11,7 @@
   "bugs": "https://github.com/cuth/postcss-pxtorem/issues",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint",
+    "lint": "eslint .",
     "test": "jasmine-node spec"
   },
   "husky": {
