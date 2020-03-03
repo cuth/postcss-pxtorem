@@ -1,7 +1,7 @@
 const postcss = require("postcss");
 const pxRegex = require("./lib/pixel-unit-regex");
 const filterPropList = require("./lib/filter-prop-list");
-const type = require('./lib/type');
+const type = require("./lib/type");
 
 const defaults = {
   rootValue: 16,
@@ -32,10 +32,10 @@ module.exports = postcss.plugin("postcss-pxtorem", options => {
     const exclude = opts.exclude;
     const filePath = css.source.input.file;
     if (
-      exclude ||
-      type.isFunction(exclude) && exclude(filePath) ||
-      type.isString(exclude) && filePath.indexOf(exclude) !== -1 ||
-      filePath.match(exclude) !== null
+      exclude &&
+      ((type.isFunction(exclude) && exclude(filePath)) ||
+        (type.isString(exclude) && filePath.indexOf(exclude) !== -1) ||
+        filePath.match(exclude) !== null)
     ) {
       return;
     }
