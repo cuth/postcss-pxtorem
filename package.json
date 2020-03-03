@@ -1,7 +1,7 @@
 {
   "name": "postcss-pxtorem",
   "description": "A CSS post-processor that converts px to rem.",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "author": "cuth",
   "license": "MIT",
   "repository": {
@@ -11,10 +11,26 @@
   "bugs": "https://github.com/cuth/postcss-pxtorem/issues",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint .",
     "test": "jasmine-node spec"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
-    "jasmine-node": "~1.11.0"
+    "eslint": "^6.8.0",
+    "husky": "^4.2.3",
+    "jasmine-node": "^3.0.0",
+    "lint-staged": "^10.0.8",
+    "prettier": "^1.19.1"
   },
   "keywords": [
     "css",
@@ -25,7 +41,6 @@
     "postcss-plugin"
   ],
   "dependencies": {
-    "object-assign": "^4.1.0",
-    "postcss": "^5.2.10"
+    "postcss": "^7.0.27"
   }
 }
