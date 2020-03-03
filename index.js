@@ -1,8 +1,7 @@
-"use strict";
-
 const postcss = require("postcss");
 const pxRegex = require("./lib/pixel-unit-regex");
 const filterPropList = require("./lib/filter-prop-list");
+const type = require("./lib/type");
 
 const defaults = {
   rootValue: 16,
@@ -11,7 +10,8 @@ const defaults = {
   propList: ["font", "font-size", "line-height", "letter-spacing"],
   replace: true,
   mediaQuery: false,
-  minPixelValue: 0
+  minPixelValue: 0,
+  exclude: null
 };
 
 const legacyOptions = {
@@ -29,6 +29,17 @@ module.exports = postcss.plugin("postcss-pxtorem", options => {
   const satisfyPropList = createPropListMatcher(opts.propList);
 
   return css => {
+    const exclude = opts.exclude;
+    const filePath = css.source.input.file;
+    if (
+      exclude &&
+      ((type.isFunction(exclude) && exclude(filePath)) ||
+        (type.isString(exclude) && filePath.indexOf(exclude) !== -1) ||
+        filePath.match(exclude) !== null)
+    ) {
+      return;
+    }
+
     const rootValue =
       typeof opts.rootValue === "function"
         ? opts.rootValue(css.source.input)
