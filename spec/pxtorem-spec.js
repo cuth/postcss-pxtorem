@@ -495,30 +495,36 @@ describe("filter-prop-list", function() {
   });
 });
 
-describe('exclude', function () {
-    it('should ignore file path with exclude RegEx', function () {
-        var options = {
-            exclude: /exclude/i
-        };
-        var processed = postcss(pxtorem(options)).process(basicCSS, { from: 'exclude/path' }).css;
-        expect(processed).toBe(basicCSS);
-    });
+describe("exclude", function() {
+  it("should ignore file path with exclude RegEx", function() {
+    var options = {
+      exclude: /exclude/i
+    };
+    var processed = postcss(pxtorem(options)).process(basicCSS, {
+      from: "exclude/path"
+    }).css;
+    expect(processed).toBe(basicCSS);
+  });
 
-    it('should not ignore file path with exclude String', function () {
-        var options = {
-            exclude: 'exclude'
-        };
-        var processed = postcss(pxtorem(options)).process(basicCSS, { from: 'exclude/path' }).css;
-        expect(processed).toBe(basicCSS);
-    });
+  it("should not ignore file path with exclude String", function() {
+    var options = {
+      exclude: "exclude"
+    };
+    var processed = postcss(pxtorem(options)).process(basicCSS, {
+      from: "exclude/path"
+    }).css;
+    expect(processed).toBe(basicCSS);
+  });
 
-    it('should not ignore file path with exclude function', function () {
-        var options = {
-            exclude: function (file) {
-                return file.indexOf('exclude') !== -1;
-            }
-        };
-        var processed = postcss(pxtorem(options)).process(basicCSS, { from: 'exclude/path' }).css;
-        expect(processed).toBe(basicCSS);
-    });
+  it("should not ignore file path with exclude function", function() {
+    var options = {
+      exclude: function(file) {
+        return file.indexOf("exclude") !== -1;
+      }
+    };
+    var processed = postcss(pxtorem(options)).process(basicCSS, {
+      from: "exclude/path"
+    }).css;
+    expect(processed).toBe(basicCSS);
+  });
 });
