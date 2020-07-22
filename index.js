@@ -35,7 +35,7 @@ module.exports = postcss.plugin("postcss-pxtorem", options => {
       exclude &&
       ((type.isFunction(exclude) && exclude(filePath)) ||
         (type.isString(exclude) && filePath.indexOf(exclude) !== -1) ||
-        filePath.match(exclude) !== null)
+        (type.isRegExp(exclude) && filePath.match(exclude) !== null))
     ) {
       return;
     }
