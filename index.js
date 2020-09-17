@@ -4,6 +4,7 @@ const filterPropList = require("./lib/filter-prop-list");
 const type = require("./lib/type");
 
 const defaults = {
+  units: 'rem',
   rootValue: 16,
   unitPrecision: 5,
   selectorBlackList: [],
@@ -47,7 +48,8 @@ module.exports = postcss.plugin("postcss-pxtorem", options => {
     const pxReplace = createPxReplace(
       rootValue,
       opts.unitPrecision,
-      opts.minPixelValue
+      opts.minPixelValue,
+      opts.units
     );
 
     css.walkDecls((decl, i) => {
@@ -100,13 +102,13 @@ function convertLegacyOptions(options) {
   });
 }
 
-function createPxReplace(rootValue, unitPrecision, minPixelValue) {
+function createPxReplace(rootValue, unitPrecision, minPixelValue, units) {
   return (m, $1) => {
     if (!$1) return m;
     const pixels = parseFloat($1);
     if (pixels < minPixelValue) return m;
     const fixedVal = toFixed(pixels / rootValue, unitPrecision);
-    return fixedVal === 0 ? "0" : fixedVal + "rem";
+    return fixedVal === 0 ? "0" : fixedVal + units;
   };
 }
 
