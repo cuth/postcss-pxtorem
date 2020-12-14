@@ -30,6 +30,7 @@
     "husky": "^4.2.3",
     "jasmine-node": "^3.0.0",
     "lint-staged": "^10.0.8",
+    "postcss": "^8.0.0",
     "prettier": "^1.19.1"
   },
   "keywords": [
@@ -40,7 +41,7 @@
     "postcss",
     "postcss-plugin"
   ],
-  "dependencies": {
-    "postcss": "^7.0.27"
+  "peerDependencies": {
+    "postcss": "^8.0.0"
   }
 }

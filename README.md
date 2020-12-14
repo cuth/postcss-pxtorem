@@ -5,7 +5,7 @@ A plugin for [PostCSS](https://github.com/ai/postcss) that generates rem units f
 ## Install
 
 ```shell
-$ npm install postcss-pxtorem --save-dev
+$ npm install postcss postcss-pxtorem --save-dev
 ```
 
 ## Usage
@@ -79,7 +79,7 @@ Default:
     - Use wildcard `*` to enable all properties. Example: `['*']`
     - Use `*` at the start or end of a word. (`['*position*']` will match `background-position-y`)
     - Use `!` to not match a property. Example: `['*', '!letter-spacing']`
-    - Combine the "not" prefix with the other prefixes. Example: `['*', '!font*']` 
+    - Combine the "not" prefix with the other prefixes. Example: `['*', '!font*']`
 - `selectorBlackList` (Array) The selectors to ignore and leave as px.
     - If value is string, it checks to see if selector contains the string.
         - `['body']` will match `.body-class`
