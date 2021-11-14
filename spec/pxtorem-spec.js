@@ -60,6 +60,19 @@ describe("pxtorem", function() {
     expect(processed).toBe(expected);
   });
 
+  it("should ignore px in custom property, but handle default values", function() {
+    var rules =
+      ":root { --rem-14px: 14px; } .rule { font-size: var(--rem-14px, 16px); }";
+    var expected =
+      ":root { --rem-14px: 0.875rem; } .rule { font-size: var(--rem-14px, 1rem); }";
+    var options = {
+      propList: ["--*", "font-size"]
+    };
+    var processed = postcss(pxtorem(options)).process(rules).css;
+
+    expect(processed).toBe(expected);
+  })
+
   it("should handle < 1 values and values without a leading 0", function() {
     var rules = ".rule { margin: 0.5rem .5px -0.2px -.2em }";
     var expected = ".rule { margin: 0.5rem 0.03125rem -0.0125rem -.2em }";
