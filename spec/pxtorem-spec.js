@@ -217,6 +217,19 @@ describe("unitPrecision", function() {
   });
 });
 
+describe("units", function() {
+  it("should replace with specified unit", function() {
+    var expected = ".rule { font-size: 0.938em }";
+    var options = {
+      unitPrecision: 3,
+      units: 'em'
+    };
+    var processed = postcss(pxtorem(options)).process(basicCSS).css;
+
+    expect(processed).toBe(expected);
+  });
+});
+
 describe("propWhiteList", function() {
   // Deprecate
   it("should only replace properties in the white list - legacy", function() {
