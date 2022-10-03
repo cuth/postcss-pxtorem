@@ -49,7 +49,8 @@ function createPxReplace(rootValue, unitPrecision, minPixelValue) {
     const pixels = parseFloat($1);
     if (pixels < minPixelValue) return m;
     const fixedVal = toFixed(pixels / rootValue, unitPrecision);
-    return fixedVal === 0 ? "0" : fixedVal + "rem";
+    // `calc` expressions need units to work properly
+    return fixedVal + "rem";
   };
 }
 
