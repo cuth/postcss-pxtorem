@@ -61,6 +61,7 @@ Type: `Object | Null`
 Default:
 ```js
 {
+    units: 'rem',
     rootValue: 16,
     unitPrecision: 5,
     propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
@@ -72,6 +73,7 @@ Default:
 }
 ```
 
+- `rem` (String) Convert target unit.
 - `rootValue` (Number | Function) Represents the root element font size or returns the root element font size based on the [`input`](https://api.postcss.org/Input.html) parameter
 - `unitPrecision` (Number) The decimal numbers to allow the REM units to grow to.
 - `propList` (Array) The properties that can change from px to rem.
