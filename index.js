@@ -131,7 +131,7 @@ module.exports = (options = {}) => {
         exclude &&
         ((type.isFunction(exclude) && exclude(filePath)) ||
           (type.isString(exclude) && filePath.indexOf(exclude) !== -1) ||
-          filePath.match(exclude) !== null)
+          (!type.isFunction(exclude) && filePath.match(exclude) !== null))
       ) {
         isExcludeFile = true;
       } else {
