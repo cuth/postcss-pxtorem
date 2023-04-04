@@ -1,23 +1,30 @@
+[data-em] {
+    --px-10: 0.625rem;
+    --px-0-5: 0.03125rem;
+    --px-3: 0.1875rem;
+    --px-14: 0.875rem;
+    --px-20-5: 1.28125rem;
+    --px-32: 2rem;
+    --px-750: 46.875rem;
+    --px-16: 1rem;
+    --px-22: 1.375rem;
+}
 .class {
-    margin: -10px .5em;
-    padding: 5rem .5px;
-    border: 3px solid black;
-    font-size: 14px;
-    font-size: 0.875rem;
-    line-height: 20px;
-    line-height: 1.25rem;
+    margin: -var(--px-10, 10px) .5em;
+    padding: 5rem var(--px-0-5, 0.5px);
+    border: var(--px-3, 3px) solid black;
+    font-size: var(--px-14, 14px);
+    line-height: var(--px-20-5, 20.5px);
 }
 .class2 {
-    font-size: 32px;
+    font-size: var(--px-32, 32px);
     font-size: 2rem;
     line-height: 1em;
 }
-@media (min-width: 750px) {
+@media (min-width: var(--px-750, 750px)) {
     .class3 {
-        font-size: 16px;
-        font-size: 1rem;
-        line-height: 22px;
-        line-height: 1.375rem;
+        font-size: var(--px-16, 16px);
+        line-height: var(--px-22, 22px);
     }
 }
 

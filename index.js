@@ -1,6 +1,7 @@
 const pxRegex = require("./lib/pixel-unit-regex");
 const filterPropList = require("./lib/filter-prop-list");
 const type = require("./lib/type");
+const { default: postcss } = require("postcss");
 
 const defaults = {
   rootValue: 16,
@@ -42,14 +43,23 @@ function convertLegacyOptions(options) {
     }
   });
 }
-
-function createPxReplace(rootValue, unitPrecision, minPixelValue) {
+/**
+ * @param pixels number
+ * @return String
+ */
+function createVarName(pixels) {
+  const pxString =  `${pixels}`.replace('.', '-')
+  return `--px-${pxString}`;
+}
+function createPxReplace(rootValue, unitPrecision, minPixelValue, cssVars) {
   return (m, $1) => {
     if (!$1) return m;
     const pixels = parseFloat($1);
     if (pixels < minPixelValue) return m;
     const fixedVal = toFixed(pixels / rootValue, unitPrecision);
-    return fixedVal === 0 ? "0" : fixedVal + "rem";
+    const varName = createVarName(pixels);
+    cssVars[varName] = `${fixedVal}rem`;
+    return fixedVal === 0 ? "0" : `var(${varName}, ${pixels}px)`;
   };
 }
 
@@ -123,6 +133,7 @@ module.exports = (options = {}) => {
   const exclude = opts.exclude;
   let isExcludeFile = false;
   let pxReplace;
+  let cssVars = {};
   return {
     postcssPlugin: "postcss-pxtorem",
     Once(css) {
@@ -145,7 +156,8 @@ module.exports = (options = {}) => {
       pxReplace = createPxReplace(
         rootValue,
         opts.unitPrecision,
-        opts.minPixelValue
+        opts.minPixelValue,
+        cssVars,
       );
     },
     Declaration(decl) {
@@ -175,6 +187,21 @@ module.exports = (options = {}) => {
       if (opts.mediaQuery && atRule.name === "media") {
         if (atRule.params.indexOf("px") === -1) return;
         atRule.params = atRule.params.replace(pxRegex, pxReplace);
+      }
+    },
+    // create a place to define the css vars
+    OnceExit(root) {
+
+      if (isExcludeFile) return;
+
+      const entries = Object.entries(cssVars);
+      if (entries.length) {
+        const rule = new postcss.Rule({ selector: "[data-em]" });
+        entries.forEach(([key, value]) => {
+          rule.append({ prop: key, value });
+        });
+
+        root.prepend(rule);
       }
     }
   };
