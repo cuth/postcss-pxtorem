@@ -1,28 +1,30 @@
-[data-em] {
+[data-rem] {
     --px-10: 0.625rem;
     --px-0-5: 0.03125rem;
     --px-3: 0.1875rem;
     --px-14: 0.875rem;
     --px-20-5: 1.28125rem;
     --px-32: 2rem;
-    --px-750: 46.875rem;
     --px-16: 1rem;
     --px-22: 1.375rem;
 }
 .class {
-    margin: -var(--px-10, 10px) .5em;
+    margin: var(--px-10, 10px) .5em;
     padding: 5rem var(--px-0-5, 0.5px);
     border: var(--px-3, 3px) solid black;
     font-size: var(--px-14, 14px);
     line-height: var(--px-20-5, 20.5px);
+    color: palegoldenrod;
 }
 .class2 {
     font-size: var(--px-32, 32px);
     font-size: 2rem;
     line-height: 1em;
+    color: powderblue
 }
-@media (min-width: var(--px-750, 750px)) {
+@media (min-width: 750px) {
     .class3 {
+        color: red;
         font-size: var(--px-16, 16px);
         line-height: var(--px-22, 22px);
     }

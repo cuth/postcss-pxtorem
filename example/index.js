@@ -7,7 +7,7 @@ const pxtorem = require("..");
 const css = fs.readFileSync("main.css", "utf8");
 const options = {
   replace: true,
-  mediaQuery: true,
+  mediaQuery: false,
   propList: ['*'],
 };
 const processedCss = postcss(pxtorem(options)).process(css).css;

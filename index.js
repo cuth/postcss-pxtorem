@@ -196,7 +196,7 @@ module.exports = (options = {}) => {
 
       const entries = Object.entries(cssVars);
       if (entries.length) {
-        const rule = new postcss.Rule({ selector: "[data-em]" });
+        const rule = new postcss.Rule({ selector: "[data-rem]" });
         entries.forEach(([key, value]) => {
           rule.append({ prop: key, value });
         });
