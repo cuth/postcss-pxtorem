@@ -122,11 +122,13 @@ module.exports = (options = {}) => {
   const satisfyPropList = createPropListMatcher(opts.propList);
   const exclude = opts.exclude;
   let isExcludeFile = false;
+  let pathOnec;
   let pxReplace;
   return {
     postcssPlugin: "postcss-pxtorem",
     Once(css) {
       const filePath = css.source.input.file;
+      pathOnec = filePath;
       if (
         exclude &&
         ((type.isFunction(exclude) && exclude(filePath)) ||
@@ -150,6 +152,13 @@ module.exports = (options = {}) => {
     },
     Declaration(decl) {
       if (isExcludeFile) return;
+
+      /**
+       * fix: when there are tons of file,
+       * Declaration's file path will be NOT same with Once's file path,
+       * the excluded files with be convert from px to rem TOO
+       */
+      if (decl.source.input.file !== pathOnec) return;
 
       if (
         decl.value.indexOf("px") === -1 ||
