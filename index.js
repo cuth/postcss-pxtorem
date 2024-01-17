@@ -1,39 +1,39 @@
-const pxRegex = require('./lib/pixel-unit-regex');
-const filterPropList = require('./lib/filter-prop-list');
-const type = require('./lib/type');
+const pxRegex = require("./lib/pixel-unit-regex");
+const filterPropList = require("./lib/filter-prop-list");
+const type = require("./lib/type");
 
 const defaults = {
   rootValue: 16,
   unitPrecision: 5,
   selectorBlackList: [],
-  propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
+  propList: ["font", "font-size", "line-height", "letter-spacing"],
   replace: true,
   mediaQuery: false,
   minPixelValue: 0,
   exclude: null,
-  unit: 'px',
+  unit: "px",
 };
 
 const legacyOptions = {
-  root_value: 'rootValue',
-  unit_precision: 'unitPrecision',
-  selector_black_list: 'selectorBlackList',
-  prop_white_list: 'propList',
-  media_query: 'mediaQuery',
-  propWhiteList: 'propList',
+  root_value: "rootValue",
+  unit_precision: "unitPrecision",
+  selector_black_list: "selectorBlackList",
+  prop_white_list: "propList",
+  media_query: "mediaQuery",
+  propWhiteList: "propList",
 };
 
 function convertLegacyOptions(options) {
-  if (typeof options !== 'object') return;
+  if (typeof options !== "object") return;
   if (
-    ((typeof options['prop_white_list'] !== 'undefined' &&
-      options['prop_white_list'].length === 0) ||
-      (typeof options.propWhiteList !== 'undefined' &&
+    ((typeof options["prop_white_list"] !== "undefined" &&
+      options["prop_white_list"].length === 0) ||
+      (typeof options.propWhiteList !== "undefined" &&
         options.propWhiteList.length === 0)) &&
-    typeof options.propList === 'undefined'
+    typeof options.propList === "undefined"
   ) {
-    options.propList = ['*'];
-    delete options['prop_white_list'];
+    options.propList = ["*"];
+    delete options["prop_white_list"];
     delete options.propWhiteList;
   }
   Object.keys(legacyOptions).forEach((key) => {
@@ -50,7 +50,7 @@ function createPxReplace(rootValue, unitPrecision, minPixelValue) {
     const pixels = parseFloat($1);
     if (pixels < minPixelValue) return m;
     const fixedVal = toFixed(pixels / rootValue, unitPrecision);
-    return fixedVal === 0 ? '0' : fixedVal + 'rem';
+    return fixedVal === 0 ? "0" : fixedVal + "rem";
   };
 }
 
@@ -65,9 +65,9 @@ function declarationExists(decls, prop, value) {
 }
 
 function blacklistedSelector(blacklist, selector) {
-  if (typeof selector !== 'string') return;
+  if (typeof selector !== "string") return;
   return blacklist.some((regex) => {
-    if (typeof regex === 'string') {
+    if (typeof regex === "string") {
       return selector.indexOf(regex) !== -1;
     }
     return selector.match(regex);
@@ -75,7 +75,7 @@ function blacklistedSelector(blacklist, selector) {
 }
 
 function createPropListMatcher(propList) {
-  const hasWild = propList.indexOf('*') > -1;
+  const hasWild = propList.indexOf("*") > -1;
   const matchAll = hasWild && propList.length === 1;
   const lists = {
     exact: filterPropList.exact(propList),
@@ -125,7 +125,7 @@ module.exports = (options = {}) => {
   let isExcludeFile = false;
   let pxReplace;
   return {
-    postcssPlugin: 'postcss-pxtorem',
+    postcssPlugin: "postcss-pxtorem",
     Once(css) {
       const filePath = css.source.input.file;
       if (
@@ -140,7 +140,7 @@ module.exports = (options = {}) => {
       }
 
       const rootValue =
-        typeof opts.rootValue === 'function'
+        typeof opts.rootValue === "function"
           ? opts.rootValue(css.source.input)
           : opts.rootValue;
       pxReplace = createPxReplace(
@@ -173,7 +173,7 @@ module.exports = (options = {}) => {
     AtRule(atRule) {
       if (isExcludeFile) return;
 
-      if (opts.mediaQuery && atRule.name === 'media') {
+      if (opts.mediaQuery && atRule.name === "media") {
         if (atRule.params.indexOf(opts.unit) === -1) return;
         atRule.params = atRule.params.replace(pxRegex(opts.unit), pxReplace);
       }
