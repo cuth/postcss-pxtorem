@@ -540,4 +540,18 @@ describe("exclude", function() {
     }).css;
     expect(processed).toBe(basicCSS);
   });
+
+  it("should only replace properties in the prop list with wildcard", function() {
+    var input =
+      "h1 { margin: 0 0 20rpx; font-size: 32rpx; line-height: 1.2; letter-spacing: 1rpx; width: 30px;}";
+    var output =
+      "h1 { margin: 0 0 1.25rem; font-size: 2rem; line-height: 1.2; letter-spacing: 0.0625rem; width: 30px;}";
+    var options = {
+      unit: "rpx",
+      propList: ["*"]
+    };
+    var processed = postcss(pxtorem(options)).process(input).css;
+
+    expect(processed).toBe(output);
+  });
 });
