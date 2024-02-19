@@ -6,7 +6,7 @@ const defaults = {
   rootValue: 16,
   unitPrecision: 5,
   selectorBlackList: [],
-  propList: ["font", "font-size", "line-height", "letter-spacing"],
+  propList: ["font", "font-size", "line-height", "letter-spacing", "word-spacing"],
   replace: true,
   mediaQuery: false,
   minPixelValue: 0,
