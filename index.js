@@ -6,12 +6,20 @@ const defaults = {
   rootValue: 16,
   unitPrecision: 5,
   selectorBlackList: [],
-  propList: ["font", "font-size", "line-height", "letter-spacing", "word-spacing"],
+  propList: [
+    "font",
+    "font-size",
+    "line-height",
+    "letter-spacing",
+    "word-spacing"
+  ],
   replace: true,
   mediaQuery: false,
+  containerQuery: false,
+  supportsQuery: false,
   minPixelValue: 0,
   exclude: null,
-  unit: "px",
+  unit: "px"
 };
 
 const legacyOptions = {
@@ -20,7 +28,7 @@ const legacyOptions = {
   selector_black_list: "selectorBlackList",
   prop_white_list: "propList",
   media_query: "mediaQuery",
-  propWhiteList: "propList",
+  propWhiteList: "propList"
 };
 
 function convertLegacyOptions(options) {
@@ -36,7 +44,7 @@ function convertLegacyOptions(options) {
     delete options["prop_white_list"];
     delete options.propWhiteList;
   }
-  Object.keys(legacyOptions).forEach((key) => {
+  Object.keys(legacyOptions).forEach(key => {
     if (Reflect.has(options, key)) {
       options[legacyOptions[key]] = options[key];
       delete options[key];
@@ -61,12 +69,12 @@ function toFixed(number, precision) {
 }
 
 function declarationExists(decls, prop, value) {
-  return decls.some((decl) => decl.prop === prop && decl.value === value);
+  return decls.some(decl => decl.prop === prop && decl.value === value);
 }
 
 function blacklistedSelector(blacklist, selector) {
   if (typeof selector !== "string") return;
-  return blacklist.some((regex) => {
+  return blacklist.some(regex => {
     if (typeof regex === "string") {
       return selector.indexOf(regex) !== -1;
     }
@@ -85,31 +93,31 @@ function createPropListMatcher(propList) {
     notExact: filterPropList.notExact(propList),
     notContain: filterPropList.notContain(propList),
     notStartWith: filterPropList.notStartWith(propList),
-    notEndWith: filterPropList.notEndWith(propList),
+    notEndWith: filterPropList.notEndWith(propList)
   };
-  return (prop) => {
+  return prop => {
     if (matchAll) return true;
     return (
       (hasWild ||
         lists.exact.indexOf(prop) > -1 ||
-        lists.contain.some(function (m) {
+        lists.contain.some(function(m) {
           return prop.indexOf(m) > -1;
         }) ||
-        lists.startWith.some(function (m) {
+        lists.startWith.some(function(m) {
           return prop.indexOf(m) === 0;
         }) ||
-        lists.endWith.some(function (m) {
+        lists.endWith.some(function(m) {
           return prop.indexOf(m) === prop.length - m.length;
         })) &&
       !(
         lists.notExact.indexOf(prop) > -1 ||
-        lists.notContain.some(function (m) {
+        lists.notContain.some(function(m) {
           return prop.indexOf(m) > -1;
         }) ||
-        lists.notStartWith.some(function (m) {
+        lists.notStartWith.some(function(m) {
           return prop.indexOf(m) === 0;
         }) ||
-        lists.notEndWith.some(function (m) {
+        lists.notEndWith.some(function(m) {
           return prop.indexOf(m) === prop.length - m.length;
         })
       )
@@ -146,7 +154,7 @@ module.exports = (options = {}) => {
       pxReplace = createPxReplace(
         rootValue,
         opts.unitPrecision,
-        opts.minPixelValue,
+        opts.minPixelValue
       );
     },
     Declaration(decl) {
@@ -177,7 +185,17 @@ module.exports = (options = {}) => {
         if (atRule.params.indexOf(opts.unit) === -1) return;
         atRule.params = atRule.params.replace(pxRegex(opts.unit), pxReplace);
       }
-    },
+
+      if (opts.containerQuery && atRule.name === "container") {
+        if (atRule.params.indexOf(opts.unit) === -1) return;
+        atRule.params = atRule.params.replace(pxRegex(opts.unit), pxReplace);
+      }
+
+      if (opts.supportsQuery && atRule.name === "supports") {
+        if (atRule.params.indexOf(opts.unit) === -1) return;
+        atRule.params = atRule.params.replace(pxRegex(opts.unit), pxReplace);
+      }
+    }
   };
 };
 module.exports.postcss = true;

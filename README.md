@@ -67,6 +67,8 @@ Default:
     selectorBlackList: [],
     replace: true,
     mediaQuery: false,
+    containerQuery: false,
+    supportsQuery: false,
     minPixelValue: 0,
     exclude: /node_modules/i
 }
@@ -87,6 +89,8 @@ Default:
         - `[/^body$/]` will match `body` but not `.body`
 - `replace` (Boolean) Replaces rules containing rems instead of adding fallbacks.
 - `mediaQuery` (Boolean) Allow px to be converted in media queries.
+- `containerQuery` (Boolean) Allow px to be converted in container queries.
+- `supportsQuery` (Boolean) Allow px to be converted in supports queries.
 - `minPixelValue` (Number) Set the minimum pixel value to replace.
 - `exclude` (String, Regexp, Function) The file path to ignore and leave as px.
     - If value is string, it checks to see if file path contains the string.

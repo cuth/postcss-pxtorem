@@ -79,7 +79,7 @@ describe("pxtorem", function() {
   });
 
   it("should remain unitless if 0", function() {
-    var expected = ".rule { font-size: 0px; font-size: 0; }";
+    var expected = ".rule { font-size: 0rem; font-size: 0; }";
     var processed = postcss(pxtorem()).process(expected).css;
 
     expect(processed).toBe(expected);
@@ -373,6 +373,35 @@ describe("mediaQuery", function() {
       "@media (min-width: 500px) { .rule { font-size: 16px } }"
     ).css;
     var expected = "@media (min-width: 31.25rem) { .rule { font-size: 1rem } }";
+
+    expect(processed).toBe(expected);
+  });
+});
+
+describe("containerQuery", function() {
+  it("should replace px in container queries", function() {
+    var options = {
+      containerQuery: true
+    };
+    var processed = postcss(pxtorem(options)).process(
+      "@container (min-width: 500px) { .rule { font-size: 16px } }"
+    ).css;
+    var expected =
+      "@container (min-width: 31.25rem) { .rule { font-size: 1rem } }";
+
+    expect(processed).toBe(expected);
+  });
+});
+
+describe("supportsQuery", function() {
+  it("should replace px in supports queries", function() {
+    var options = {
+      supportsQuery: true
+    };
+    var processed = postcss(pxtorem(options)).process(
+      "@supports (top: max(24px)) { .rule { font-size: 16px } }"
+    ).css;
+    var expected = "@supports (top: max(1.5rem)) { .rule { font-size: 1rem } }";
 
     expect(processed).toBe(expected);
   });
