@@ -12,12 +12,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "jasmine-node spec"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "test": "jasmine spec/pxtorem-spec.js",
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.js": [
@@ -26,12 +22,14 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "husky": "^4.2.3",
-    "jasmine-node": "^1.16.0",
-    "lint-staged": "^10.0.8",
-    "postcss": "^8.0.0",
-    "prettier": "^1.19.1"
+    "@eslint/js": "^9.0.0",
+    "eslint": "^10.0.3",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "jasmine": "^5.0.0",
+    "lint-staged": "^16.3.2",
+    "postcss": "^8.5.8",
+    "prettier": "^3.8.1"
   },
   "keywords": [
     "css",
