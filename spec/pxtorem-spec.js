@@ -88,7 +88,7 @@ describe("pxtorem", function() {
   it("should not convert 0px to unitless 0 for CSS custom properties", function() {
     var input = ":root { --tw-ring-offset-width: 0px; }";
     var expected = ":root { --tw-ring-offset-width: 0px; }";
-    var options = { propList: ["*"] };
+    var options = { propList: ["--*"] };
     var processed = postcss(pxtorem(options)).process(input).css;
 
     expect(processed).toBe(expected);
