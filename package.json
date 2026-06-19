@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:cuth/postcss-pxtorem.git"
+    "url": "git+https://github.com/cuth/postcss-pxtorem.git"
   },
   "bugs": "https://github.com/cuth/postcss-pxtorem/issues",
   "main": "index.js",
