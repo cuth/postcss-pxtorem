@@ -87,6 +87,27 @@ describe("pxtorem", function() {
 });
 
 describe("value parsing", function() {
+  it("should convert px values written with an exponent", function() {
+    var options = {
+      propList: ["*"]
+    };
+    var rules = ".rule { margin: 1e1px 1.6E3px 1.6e-1px; }";
+    var expected = ".rule { margin: 0.625rem 100rem 0.01rem; }";
+    var processed = postcss(pxtorem(options)).process(rules).css;
+
+    expect(processed).toBe(expected);
+  });
+
+  it("should not convert only the exponent of a px value", function() {
+    var options = {
+      propList: ["*"]
+    };
+    var rules = ".rule { border-radius: 3.40282e38px; }";
+    var processed = postcss(pxtorem(options)).process(rules).css;
+
+    expect(processed).toMatch(/^\.rule \{ border-radius: [\d.]+e\+37rem; \}$/);
+  });
+
   it("should not replace values in double quotes or single quotes - legacy", function() {
     var options = {
       propWhiteList: []
